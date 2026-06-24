@@ -22,11 +22,11 @@
 			td.financial{ text-align: right; }
 			td.number{ text-align: center; }
 			div.article {text-align: justify; font-family:Arial;}
-			div.head {text-align: center;}
+			div.head {text-align:center; border:none; margin: 0px;}
 			label.subtitle{font-weight: bold;}
-			label.title {font-weight: bold; font-size: 25px; font-family: Comic Sans MS;}
-			label.as {font-weight: bold; font-size: 40px; font-family: Arial;}
-			label.cnfc {font-weight: bold; font-size: 20px; font-family: Comic Sans MS; color: gray;}
+			label.title {font-weight: bold; font-size: 25px; font-family: Comic Sans MS; text-align:center;}
+			label.as {font-weight: bold; font-size: 40px; font-family: Arial; text-align:center;}
+			label.cnfc {font-weight: bold; font-size: 20px; font-family: Comic Sans MS; color: gray; text-align:center;}
 			select.request {font-size: 16px; font-family: lora, sans-serif;}
 			button.buttonproperties {font-size: 16px; font-family: lora, sans-serif;}
 			input.inputproperties {font-size: 16px; font-family: lora, sans-serif;}
@@ -46,251 +46,252 @@
 	
 	<body>
 		<!-- TYPE DE DEMANDE -->
-		<div id="d_head" class="head">
-			<table>
-				<tr>
-					<td class="address" style="width:200px">
-						<img src="logo.png" /><br>
-						Sentier des bois des Monts Frais<br>
-						95130 Franconville la Garenne
-					</td>
-					<td class="noborder">
-						<br>
-						<label class="as">Association Air et Soleil</label><br><br>
-						<label class="cnfc">Club Naturiste Familial et Convivial</label><br><br>
-						<label id="l_title" class="title"></label><br><br>
-					</td>		
-				</tr>
-			</table>
-		</div>
+		<div style="width:1000px">
+			<div id="d_head" class="head">
+				<table>
+					<tr>
+						<td class="address" style="width:200px">
+							<img src="logo.png" /><br>
+							Sentier des bois des Monts Frais<br>
+							95130 Franconville la Garenne (r0.9)
+						</td>
+						<td class="noborder" style="width:800px">
+							<br>
+							<label class="as">Association Air et Soleil</label><br><br>
+							<label class="cnfc">Club Naturiste Familial et Convivial</label><br><br>
+							<label id="l_title" class="title"></label><br><br>
+						</td>		
+					</tr>
+				</table>
+			</div>
 		
-		<div class='article'>
-			<hr>
-			L’adhésion à notre Association AIR ET SOLEIL, induit quelques obligations.
-			Si l’argent s’impose pour les charges inévitables (location du terrain, eau, électricité, consommables,…), l’argent n’est qu’un outil, et ne peut répondre à d’autres besoins tels que le bien vivre ensemble, la solidarité, et le dynamisme d’un projet.<br><br>
-			Nous pouvons et devons, à la fois, être acteurs et bénéficiaires de notre Association. La charge de travail doit être répartie entre tous, de façon plus ou moins visible pour entretenir le parc, réparer les équipements, contrôler la piscine, nettoyer les sanitaires, servir à la buvette, faire les courses, … Il en va de l’engagement personnel de chacun selon ses compétences, disponibilités, et capacités. La vie associative est en renouvellement permanent, rien n’est jamais acquis. 
-			Le service est continu, l’endurance est nécessaire d’année en année.<br><br>
-			<hr>
-			<p align="right"><button class="buttonproperties" onclick="f_priceDisplay()">Tarifs</button>
-		</div>
+			<div class='article'>
+				<hr>
+				L’adhésion à notre Association AIR ET SOLEIL, induit quelques obligations.
+				Si l’argent s’impose pour les charges inévitables (location du terrain, eau, électricité, consommables,…), l’argent n’est qu’un outil, et ne peut répondre à d’autres besoins tels que le bien vivre ensemble, la solidarité, et le dynamisme d’un projet.<br><br>
+				Nous pouvons et devons, à la fois, être acteurs et bénéficiaires de notre Association. La charge de travail doit être répartie entre tous, de façon plus ou moins visible pour entretenir le parc, réparer les équipements, contrôler la piscine, nettoyer les sanitaires, servir à la buvette, faire les courses, … Il en va de l’engagement personnel de chacun selon ses compétences, disponibilités, et capacités. La vie associative est en renouvellement permanent, rien n’est jamais acquis. 
+				Le service est continu, l’endurance est nécessaire d’année en année.<br><br>
+				<hr>
+				<p align="right"><button class="buttonproperties" onclick="f_priceDisplay()">Tarifs</button>
+			</div>
 		
 		
-		<div id="d_request">
-			<label class="subtitle">Type de demande :</label>
+			<div id="d_request">
+				<label class="subtitle">Type de demande :</label>
+				<br><br>
+				<select id="form_sbx_adhesion" onchange="f_request()" class="request" required>
+					<Option value="">Sélectionner une option</Option>
+					<Option value="adhesion">J'adhère pour la première fois à Air & Soleil</Option>
+					<Option value="reconduction">Je renouvelle mon adhésion à Air & Soleil</Option>
+					<Option value="option">J'ajoute une composante à mon adhésion</Option>
+				</select>
+			</div>
+			<br>
+
+		
+			<div id="d_members" hidden>
+			<label class="subtitle">Liste des adhérents :</label>
+				<table id="t_tableMembers" class="blue">
+					<thead>
+						<tr>
+							<th>Action</th>
+							<th>Statut</th>
+							<th>Nom</th>
+							<th>Prénom</th>
+							<th>Genre</th>
+							<th>Date de naissance</th>
+							<th>Adresse</th>
+							<th>Code postal</th>
+							<th>Ville</th>
+							<th>Adresse électronique</th>
+							<th>Numéro de téléphone</th>
+							<th>Carte FFN</th>
+						</tr>
+					</thead>
+					<tbody id="t_bodyMembers"  class="member">
+						<tr class="new-row">
+							<td class="actions">
+								<button disabled id="b_addMember" onclick="f_OpenAddMembers()">➕</button>
+								<button disabled>➖</button>
+								<button disabled>✏️</button>
+							</td>
+							<td colspan="11"></td>
+						</tr>
+					</tbody>
+				</table>
+				<button id="b_closeTableMembers" onclick="f_disableTableMembers()" class="buttonproperties" disabled>J'ai embarqué tout le monde dans l'aventure, je valide</button>
+			</div>
 			<br><br>
-			<select id="form_sbx_adhesion" onchange="f_request()" class="request" required>
-				<Option value="">Sélectionner une option</Option>
-				<Option value="adhesion">J'adhère pour la première fois à Air & Soleil</Option>
-				<Option value="reconduction">Je renouvelle mon adhésion à Air & Soleil</Option>
-				<Option value="option">J'ajoute une composante à mon adhésion</Option>
-			</select>
-		</div>
-		<br>
-
-		</div>
-		<div id="d_members" hidden>
-		<label class="subtitle">Liste des adhérents :</label>
-			<table id="t_tableMembers" class="blue">
-				<thead>
+			<!-- LISTE DES OPTIONS -->
+			<div id="d_articles" hidden>
+				<label class="subtitle">Liste des composantes :</label>
+				<table id='t_tableArticles' class="blue">
+					<thead>
+						<tr>
+							<th>Action</th>
+							<th>Désignation</th>
+							<th>Quantité</th>
+							<th>Prix unitaire</th>
+							<th>Total ligne</th>
+						</tr>
+					</thead>
+					<tbody id="t_bodyArticles">
+						<!-- Pré‑ligne vide (Nom modifiable) -->
+						<tr class="new-row">
+							<td class="actions">
+								<button id="b_addOption" onclick="f_openAddArticle()">➕</button>
+								<button disabled>➖</button>
+								<button disabled>✏️</button>
+							</td>
+							<td colspan="4"></td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="blue">
 					<tr>
-						<th>Action</th>
-						<th>Statut</th>
-						<th>Nom</th>
-						<th>Prénom</th>
-						<th>Genre</th>
-						<th>Date de naissance</th>
-						<th>Adresse</th>
-						<th>Code postal</th>
-						<th>Ville</th>
-						<th>Adresse électronique</th>
-						<th>Numéro de téléphone</th>
-						<th>Carte FFN</th>
+						<td>Total de mon adhésion et/ou composantes</td>
+						<td id="t_totalPrice" class='financial'></td>
 					</tr>
-				</thead>
-				<tbody id="t_bodyMembers"  class="member">
-					<tr class="new-row">
-						<td class="actions">
-							<button disabled id="b_addMember" onclick="f_OpenAddMembers()">➕</button>
-							<button disabled>➖</button>
-							<button disabled>✏️</button>
-						</td>
-						<td colspan="11"></td>
-					</tr>
-				</tbody>
-			</table>
-			<button id="b_closeTableMembers" onclick="f_disableTableMembers()" class="buttonproperties" disabled>J'ai embarqué tout le monde dans l'aventure, je valide</button>
+				</table>
+				<button id="b_valideArticles" onclick="f_valideArticles()" class="buttonproperties">Je n'ai plus ou pas d'option à ajouter.</button>
+			</div>
+			<div id="d_payment" hidden>
+				<table class="blue">
+					<thead>
+						<tr>
+						<th>Modes de Règlement et Echéance</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Je peux régler mon adhésion et ses composantes selon l'un des mode de règlements suivants:
+								<ul>
+									<li>Par chèque à l'ordre de <i>Air et Soleil</i> envoyé par courrier à <br><b><dd>M. Cyrille Kehl<br>80, rue du général de Gaulle<br>95120 Ermont,</b></li>
+									<li>Par virement bancaire à :</li>
+										<ul>
+											<li>Destinataire :<b>ASSOCIATION CULTURISTE AIR ET SOLEIL</b></li>
+											<li>IBAN : <b>FR76 3006 6101 3200 0205 9250 138</b></li>
+											<li>BIC : <b>CMCIFRPP</b></li>
+											<li id="l_info01"></li>
+										</ul>
+									<li>En espèce à la buvette</li>
+								</ul>et selon l'échéance suivante :<ul>
+									<li id="l_info02"></li>
+									<li><b>Comptant</b> au moment de l'adhésion pour toute <b>nouvelle d'adhésion et composantes. </b> Pour toute dérogation, consulter la trésorière.</li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<form>
+				<div id="d_personalData" class="article" hidden>
+					<table class="blue">
+						<thead>
+							<tr>
+							<th>Données Personnelles</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Les informations recueillies sur ce formulaire d'inscription ne sont pas enregistrées sur ce site ni sur aucun autre site.
+									Elles sont envoyées par courriel aux membres du bureau et sont utilisées pour la gestion administratives des adhérents et de la comptabilité dans des fichiers informatisés dans le nuage (cloud) privé de l'association (Microsoft OneDrive)et dans le logiciel de comptabilité sur un ordinateur local.
+									Les données collectées sont communiquées aux seuls membres du bureau de l'association, et sont conservées pendant 3 ans.
+									Vous pouvez accéder aux données vous concernant, les rectifier, demander leur effacement (en cas de résiliation) ou exercer votre droit à la limitation du traitement de vos données.
+									Consultez le site cnil.fr pour plus d’informations sur vos droits. Pour exercer ces droits ou pour toute question sur le traitement de vos données dans ce dispositif, vous pouvez contacter le bureau de l'association par mail airetsoleil95@gmail.com ou par téléphone au 07.82.20.71.82. Si vous estimez, après nous avoir contactés, que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL.<br>
+									<input type="checkbox" id="i_personalData" name="personalData" required>En cochant cette case, je confirme avoir pris connaissance de la gestion des données personnelles.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="d_internalRegulations" class="article" hidden>
+					<table class="blue">
+						<thead>
+							<tr>
+							<th>Règlement Intérieur</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><input type="checkbox" id="i_internalRegulations" name="internalRegulations" required>En cochant cette case, je confirme avoir pris connaissance du <a href="internal_regulation.pdf" target="_blank">règlement intérieur</a> et je m'engage à le respecter.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="d_whattsapp" class="article" hidden>
+					<table class="blue">
+						<thead>
+							<tr>
+							<th>Whats'app</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>L'association utilise des groupes dans l'application Watts'App pour communiquer entre ses membres.<br>
+									La participation à ces groupes rend visible les numéros de téléphone de ses membres au sein des groupes.<br>
+								<input type="radio" name="Agrement" id="i_radioWhattsappOk" required>J'accepte de participer à ces groupes.<br>
+								<input type="radio" name="Agrement" id="i_radioWhattsappNok" required>Je ne souhaite pas participer à ces groupes.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="d_imageRights" class="article" hidden>
+					<table class="blue">
+						<thead>
+							<tr>
+							<th>Droit à l'image</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Toute prise d'image des adhérents et des visiteurs tant au club qu'aux manifestations extérieures est trictement interdit.<br>
+								Tout exception peut se faire avec l'approbation préalable et ponctuelle de chaque adhérent et visiteur avant une prise d'image.<br>
+								Le preneur d'image sera tenu pour responsable en cas de plainte d'un des adhérents ou visiteurs.<br>
+								<input type="checkbox" id="i_imageRights" name="imageRights" required>En cochant cette case, je confirme avoir pris connaissance du droit à l'image et m'engage à le respecter.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="d_caution" class="article" hidden>
+					<table class="blue">
+						<thead>
+							<tr>
+							<th>Caution pour la clé d'un casier</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>La caution pour la clé d'un casier couvrira les frais de duplication de la clé confiée en cas de perte, de vol,  de détérioration ou de non-retouren fin d'adhésion.
+								Elle sera restitué à l'adhérent en cas de non-réhadésion ou en cas de restitution du casier selon les termes inscris dans le règlement intérieur. <br>
+								<input type="checkbox" id="i_caution" name="caution" required>En cochant cette case, je confirme avoir pris connaissance des modalités liées à la caution pour une clé de casier.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<div id="d_signUp" class="article" hidden>
+					<table class="blue">
+						<thead>
+							<tr>
+							<th>Signature</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><input type="checkbox" id="i_signature" name="signature" required>En cochant cette case, je valide et signe ma demande d'adhésion et ses composantes.<br>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<input id="i_finalValidation" onclick="f_sendEmail()" value="J'envoie ma demande" class="inputproperties">
+				</div>
+			</form>
 		</div>
-		<br><br>
-		<!-- LISTE DES OPTIONS -->
-		<div id="d_articles" hidden>
-			<label class="subtitle">Liste des composantes :</label>
-			<table id='t_tableArticles' class="blue">
-				<thead>
-					<tr>
-						<th>Action</th>
-						<th>Désignation</th>
-						<th>Quantité</th>
-						<th>Prix unitaire</th>
-						<th>Total ligne</th>
-					</tr>
-				</thead>
-			 	<tbody id="t_bodyArticles">
-					<!-- Pré‑ligne vide (Nom modifiable) -->
-					<tr class="new-row">
-						<td class="actions">
-							<button id="b_addOption" onclick="f_openAddArticle()">➕</button>
-							<button disabled>➖</button>
-							<button disabled>✏️</button>
-						</td>
-						<td colspan="4"></td>
-					</tr>
-				</tbody>
-			</table>
-			<table class="blue">
-				<tr>
-					<td>Total de mon adhésion et/ou composantes</td>
-					<td id="t_totalPrice" class='financial'></td>
-				</tr>
-			</table>
-			<button id="b_valideArticles" onclick="f_valideArticles()" class="buttonproperties">Je n'ai plus ou pas d'option à ajouter.</button>
-		</div>
-		<div id="d_payment" hidden>
-			<table class="blue">
-				<thead>
-					<tr>
-					<th>Modes de Règlement et Echéance</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>Je peux régler mon adhésion et ses composantes selon l'un des mode de règlements suivants:
-							<ul>
-								<li>Par chèque à l'ordre de <i>Air et Soleil</i> envoyé par courrier à <br><b><dd>M. Cyrille Kehl<br>80, rue du général de Gaulle<br>95120 Ermont,</b></li>
-								<li>Par virement bancaire à :</li>
-									<ul>
-										<li>Destinataire :<b>ASSOCIATION CULTURISTE AIR ET SOLEIL</b></li>
-										<li>IBAN : <b>FR76 3006 6101 3200 0205 9250 138</b></li>
-										<li>BIC : <b>CMCIFRPP</b></li>
-										<li id="l_info01"></li>
-									</ul>
-								<li>En espèce à la buvette</li>
-							</ul>et selon l'échéance suivante :<ul>
-								<li id="l_info02"></li>
-								<li><b>Comptant</b> au moment de l'adhésion pour toute <b>nouvelle d'adhésion et composantes. </b> Pour toute dérogation, consulter la trésorière.</li>
-							</ul>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<form>
-			<div id="d_personalData" class="article" hidden>
-				<table class="blue">
-					<thead>
-						<tr>
-						<th>Données Personnelles</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Les informations recueillies sur ce formulaire d'inscription ne sont pas enregistrées sur ce site ni sur aucun autre site.
-								Elles sont envoyées par courriel aux membres du bureau et sont utilisées pour la gestion administratives des adhérents et de la comptabilité dans des fichiers informatisés dans le nuage (cloud) privé de l'association (Microsoft OneDrive)et dans le logiciel de comptabilité sur un ordinateur local.
-								Les données collectées sont communiquées aux seuls membres du bureau de l'association, et sont conservées pendant 3 ans.
-								Vous pouvez accéder aux données vous concernant, les rectifier, demander leur effacement (en cas de résiliation) ou exercer votre droit à la limitation du traitement de vos données.
-								Consultez le site cnil.fr pour plus d’informations sur vos droits. Pour exercer ces droits ou pour toute question sur le traitement de vos données dans ce dispositif, vous pouvez contacter le bureau de l'association par mail airetsoleil95@gmail.com ou par téléphone au 07.82.20.71.82. Si vous estimez, après nous avoir contactés, que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL.<br>
-								<input type="checkbox" id="i_personalData" name="personalData" required>En cochant cette case, je confirme avoir pris connaissance de la gestion des données personnelles.
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div id="d_internalRegulations" class="article" hidden>
-				<table class="blue">
-					<thead>
-						<tr>
-						<th>Règlement Intérieur</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><input type="checkbox" id="i_internalRegulations" name="internalRegulations" required>En cochant cette case, je confirme avoir pris connaissance du <a href="internal_regulation.pdf" target="_blank">règlement intérieur</a> et je m'engage à le respecter.
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div id="d_whattsapp" class="article" hidden>
-				<table class="blue">
-					<thead>
-						<tr>
-						<th>Whats'app</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>L'association utilise des groupes dans l'application Watts'App pour communiquer entre ses membres.<br>
-								La participation à ces groupes rend visible les numéros de téléphone de ses membres au sein des groupes.<br>
-							<input type="radio" name="Agrement" id="i_radioWhattsappOk" required>J'accepte de participer à ces groupes.<br>
-							<input type="radio" name="Agrement" id="i_radioWhattsappNok" required>Je ne souhaite pas participer à ces groupes.
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div id="d_imageRights" class="article" hidden>
-				<table class="blue">
-					<thead>
-						<tr>
-						<th>Droit à l'image</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Toute prise d'image des adhérents et des visiteurs tant au club qu'aux manifestations extérieures est trictement interdit.<br>
-							Tout exception peut se faire avec l'approbation préalable et ponctuelle de chaque adhérent et visiteur avant une prise d'image.<br>
-							Le preneur d'image sera tenu pour responsable en cas de plainte d'un des adhérents ou visiteurs.<br>
-							<input type="checkbox" id="i_imageRights" name="imageRights" required>En cochant cette case, je confirme avoir pris connaissance du droit à l'image et m'engage à le respecter.
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div id="d_caution" class="article" hidden>
-				<table class="blue">
-					<thead>
-						<tr>
-						<th>Caution pour la clé d'un casier</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>La caution pour la clé d'un casier couvrira les frais de duplication de la clé confiée en cas de perte, de vol,  de détérioration ou de non-retouren fin d'adhésion.
-							Elle sera restitué à l'adhérent en cas de non-réhadésion ou en cas de restitution du casier selon les termes inscris dans le règlement intérieur. <br>
-							<input type="checkbox" id="i_caution" name="caution" required>En cochant cette case, je confirme avoir pris connaissance des modalités liées à la caution pour une clé de casier.
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			
-			<div id="d_signUp" class="article" hidden>
-				<table class="blue">
-					<thead>
-						<tr>
-						<th>Signature</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><input type="checkbox" id="i_signature" name="signature" required>En cochant cette case, je valide et signe ma demande d'adhésion et ses composantes.<br>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<input id="i_finalValidation" onclick="f_sendEmail()" value="J'envoie ma demande" class="inputproperties">
-			</div>
-		</form>
-
 
 		<!-- FENETRE SAISI DES ADHERENTS -->
 		<div id="modal_members" class="modal">
@@ -401,7 +402,7 @@
 				
 			<button onclick="f_closeModalPrices()">Fermer</button>
 		</div>
-<script type="text/javascript" type="module" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+<script type="text/javascript" type="module" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script type="text/javascript" type="module" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script type="text/javascript">
 let v_mode = 'add';
@@ -1443,16 +1444,17 @@ function f_getFirstEmail() {
 }
 
 
+//emailjs.init("2guZj7PKd8GsJG4no");
+
 function f_sendEmail() {
-	console.log("[f_sendEmail()]");
- 
+  console.log("[f_sendEmail()]");
+
   const pdfBlob = f_generatePDF();
   const firstEmail = f_getFirstEmail();
 
   const reader = new FileReader();
 
   reader.onload = function() {
-
     const base64PDF = reader.result.split(',')[1];
 
     const templateParams = {
@@ -1463,18 +1465,23 @@ function f_sendEmail() {
     };
 	
 	emailjs.init("2guZj7PKd8GsJG4no");
-    emailjs.send("service_s5kskmc", "template_qkyeghb", templateParams)
-
-      .then(function(response) {
-        alert("✅ Email envoyé avec succès !");
-      }, function(error) {
-        alert("❌ Erreur lors de l'envoi");
-        console.log(error);
-      });
+    emailjs.send(
+      "service_s5kskmc",
+      "template_qkyeghb",
+      templateParams
+    )
+    .then(() => {
+      alert("✅ Email envoyé avec succès !");
+    })
+    .catch((error) => {
+      alert("❌ Erreur lors de l'envoi");
+      console.log(error);
+    });
   };
 
   reader.readAsDataURL(pdfBlob);
 }
+
 
 
  
