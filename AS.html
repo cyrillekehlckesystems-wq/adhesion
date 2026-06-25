@@ -413,7 +413,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "0.26";
+let l_release = "0.27";
 
 const c_yearSubscription = 2027;
 const c_singlePrice = 233;
@@ -1464,7 +1464,7 @@ function f_buildHtml() {
         <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:right;">${c[4].textContent}</td>
       </tr>`;
   }
-  
+	bg = "#ffffff";
 	const c_internalRegulations = document.getElementById("i_internalRegulations").checked;
 	let v_internalRegulations = (c_internalRegulations) ?`
 		<tr style="background-color:${bg};">
