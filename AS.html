@@ -413,7 +413,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "0.23";
+let l_release = "0.24";
 
 const c_yearSubscription = 2027;
 const c_singlePrice = 233;
@@ -1464,6 +1464,17 @@ function f_buildHtml() {
         <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:right;">${c[4].textContent}</td>
       </tr>`;
   }
+  
+  const c_internalRegulations = document.getElementById("i_internalRegulations").checked;
+  console.log(" - c_internalRegulations " + c_agreement");
+  const c_imageRight = document.getElementById("i_imageRights").checked;
+  const c_personalData = document.getElementById("i_personalData").checked;
+  const c_caution = document.getElementById("i_caution").checked;
+  const c_radioWhattsappNok = document.getElementById("i_radioWhattsappNok").checked;
+  const c_radioWhattsappOk = document.getElementById("i_radioWhattsappOk").checked;
+  const c_signature = document.getElementById("i_signature").checked;
+  
+  
 
   // --- Construction de l'email complet ---
   return `
@@ -1500,7 +1511,7 @@ function f_buildHtml() {
                   <tr style="background-color:#4AACC6;color:#ffffff;">
                     <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Statut</th>
                     <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Nom Prénom</th>
-					<th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">sexe/Genre</th>
+					<th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Sexe/Genre</th>
                     <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:center;">Naissance</th>
                     <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Adresse</th>
                     <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">E-mail</th>
