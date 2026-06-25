@@ -413,7 +413,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "0.27";
+let l_release = "0.28";
 
 const c_yearSubscription = 2027;
 const c_singlePrice = 233;
@@ -1586,10 +1586,23 @@ function f_buildHtml() {
               </table>
             </td>
           </tr>
-		  ${v_personalData}
-		  ${v_internalRegulations}
-		  ${v_radioWhattsappOk}
-		  ${v_radioWhattsappNok}
+		  
+		  <!-- CONSENTEMENTS -->
+          <tr>
+            <td style="padding:20px 30px 0;">
+              <p style="margin:0;font-size:14px;color:#555;">
+                <strong style="color:#4AACC6;">Consentement (ou pas) :</strong> ${requestLabel}
+              </p>
+            </td>
+          </tr>
+			<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+			  ${v_personalData}
+			  ${v_internalRegulations}
+			  ${v_radioWhattsappOk}
+			  ${v_radioWhattsappNok}
+			  ${v_caution}
+			  ${v_signature}
+		  </table>
           <!-- PIED DE PAGE -->
           <tr>
             <td style="background-color:#f7f9fb;padding:18px 30px;border-top:1px solid #e0e0e0;text-align:center;">
