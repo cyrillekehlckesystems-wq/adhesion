@@ -53,7 +53,7 @@
 						<td class="address" style="width:200px">
 							<img src="logo2.png" /><br>
 							Sentier des bois des Monts Frais<br>
-							95130 Franconville la Garenne (r0.16)
+							95130 Franconville la Garenne (r0.17)
 						</td>
 						<td class="noborder" style="width:800px">
 							<br>
@@ -1410,7 +1410,242 @@ function f_getFirstEmail() {
   return "";
 }
 
-function f_generatePDF() {
+// -------------------------------------------------------------------------------
+// 5.4.BUILD THE HTML PAGE FOR EMAIL
+// -------------------------------------------------------------------------------
+function f_buildEmailHtml() {
+  console.log("[f_buildEmailHtml]");
+
+  // --- Récupération des données ---
+  const requestType = document.getElementById('form_sbx_adhesion');
+  const requestLabel = requestType.options[requestType.selectedIndex].text;
+  const year = c_yearSubscription;
+  const total = document.getElementById('t_totalPrice').textContent || "—";
+
+  // --- Lignes du tableau des adhérents ---
+  const tbMembers = document.getElementById('t_bodyMembers');
+  const nbMembers = tbMembers.rows.length - 1; // ignore la ligne vide
+  let memberRows = "";
+
+  for (let i = 0; i < nbMembers; i++) {
+    const c = tbMembers.rows[i].cells;
+    const bg = (i % 2 === 0) ? "#ffffff" : "#eef7fa";
+    memberRows += `
+      <tr style="background-color:${bg};">
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;">${c[1].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;">${c[2].textContent} ${c[3].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:center;">${c[5].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#666;">${c[6].textContent}, ${c[7].textContent} ${c[8].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;">${c[9].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:center;">${c[10].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:center;">${c[11].textContent}</td>
+      </tr>`;
+  }
+
+  // --- Lignes du tableau des composantes ---
+  const tbArticles = document.getElementById('t_bodyArticles');
+  const nbArticles = tbArticles ? tbArticles.rows.length - 1 : 0;
+  let articleRows = "";
+
+  for (let i = 0; i < nbArticles; i++) {
+    const row = tbArticles.rows[i];
+    if (row.hidden) continue; // ignore les lignes masquées (ex: caution à 0)
+    const c = row.cells;
+    const bg = (i % 2 === 0) ? "#ffffff" : "#eef7fa";
+    articleRows += `
+      <tr style="background-color:${bg};">
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;">${c[1].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:center;">${c[2].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:right;">${c[3].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:right;">${c[4].textContent}</td>
+      </tr>`;
+  }
+
+  // --- Construction de l'email complet ---
+  return `
+  <div style="margin:0;padding:0;background-color:#f0f2f5;font-family:Arial,Helvetica,sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f2f5;padding:20px 0;">
+      <tr><td align="center">
+
+        <table role="presentation" width="700" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+
+          <!-- EN-TÊTE -->
+          <tr>
+            <td style="background-color:#4AACC6;padding:24px 30px;text-align:center;">
+              <div style="color:#ffffff;font-size:30px;font-weight:bold;font-family:Arial;">Association Air et Soleil</div>
+              <div style="color:#dff1f6;font-size:16px;margin-top:4px;">Club Naturiste Familial et Convivial</div>
+              <div style="color:#ffffff;font-size:20px;font-weight:bold;margin-top:12px;">Bulletin d'Adhésion Année ${year}</div>
+            </td>
+          </tr>
+
+          <!-- TYPE DE DEMANDE -->
+          <tr>
+            <td style="padding:20px 30px 0;">
+              <p style="margin:0;font-size:14px;color:#555;">
+                <strong style="color:#4AACC6;">Type de demande :</strong> ${requestLabel}
+              </p>
+            </td>
+          </tr>
+
+          <!-- ADHÉRENTS -->
+          <tr>
+            <td style="padding:20px 30px 0;">
+              <h3 style="margin:0 0 10px;color:#333;font-size:16px;">Liste des adhérents</h3>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                <thead>
+                  <tr style="background-color:#4AACC6;color:#ffffff;">
+                    <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Statut</th>
+                    <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Nom Prénom</th>
+                    <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:center;">Naissance</th>
+                    <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Adresse</th>
+                    <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">E-mail</th>
+                    <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:center;">Tél.</th>
+                    <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:center;">FFN</th>
+                  </tr>
+                </thead>
+                <tbody>${memberRows || '<tr><td colspan="7" style="padding:10px;text-align:center;color:#999;font-size:12px;">Aucun adhérent</td></tr>'}</tbody>
+              </table>
+            </td>
+          </tr>
+
+          <!-- COMPOSANTES -->
+          <tr>
+            <td style="padding:20px 30px 0;">
+              <h3 style="margin:0 0 10px;color:#333;font-size:16px;">Composantes de l'adhésion</h3>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                <thead>
+                  <tr style="background-color:#4AACC6;color:#ffffff;">
+                    <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Désignation</th>
+                    <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:center;">Qté</th>
+                    <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:right;">Prix unitaire</th>
+                    <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:right;">Total</th>
+                  </tr>
+                </thead>
+                <tbody>${articleRows || '<tr><td colspan="4" style="padding:10px;text-align:center;color:#999;font-size:12px;">Aucune composante</td></tr>'}</tbody>
+              </table>
+            </td>
+          </tr>
+		  
+			${f_buildEngagementsHtml()}
+			
+          <!-- TOTAL -->
+          <tr>
+            <td style="padding:16px 30px 30px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:14px;background-color:#eef7fa;border-radius:6px;text-align:right;font-size:18px;font-weight:bold;color:#4AACC6;">
+                    Total de l'adhésion : ${total}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- PIED DE PAGE -->
+          <tr>
+            <td style="background-color:#f7f9fb;padding:18px 30px;border-top:1px solid #e0e0e0;text-align:center;">
+              <p style="margin:0;font-size:11px;color:#999;">
+                Sentier des bois des Monts Frais — 95130 Franconville la Garenne<br>
+                Demande générée automatiquement le ${new Date().toLocaleDateString('fr-FR')}
+              </p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td></tr>
+    </table>
+  </div>`;
+}
+
+function f_buildEngagementsHtml() {
+  console.log("[f_buildEngagementsHtml]");
+
+  // Helper : ligne d'engagement avec pastille verte/rouge
+  const line = (label, ok) => {
+    const color = ok ? "#2e7d32" : "#c62828";
+    const icon  = ok ? "Accepté" : "Non renseigné";
+    return `
+      <tr>
+        <td style="padding:8px;border:1px solid #cccccc;font-size:13px;color:#333;">${label}</td>
+        <td style="padding:8px;border:1px solid #cccccc;font-size:13px;font-weight:bold;color:${color};text-align:center;">${icon}</td>
+      </tr>`;
+  };
+
+  // Helper : un div est-il visible (donc concerné par la demande) ?
+  const isVisible = (id) => {
+    const el = document.getElementById(id);
+    return el && el.style.display !== 'none' && !el.hidden;
+  };
+
+  let rows = "";
+
+  // Données personnelles
+  if (isVisible('d_personalData')) {
+    rows += line("Gestion des données personnelles (RGPD)",
+                 document.getElementById('i_personalData').checked);
+  }
+
+  // Règlement intérieur
+  if (isVisible('d_internalRegulations')) {
+    rows += line("Règlement intérieur",
+                 document.getElementById('i_internalRegulations').checked);
+  }
+
+  // WhatsApp (radio : Ok / Nok)
+  if (isVisible('d_whattsapp')) {
+    const ok  = document.getElementById('i_radioWhattsappOk').checked;
+    const nok = document.getElementById('i_radioWhattsappNok').checked;
+    const label = ok ? "Participe aux groupes WhatsApp"
+                : nok ? "Ne souhaite pas participer aux groupes WhatsApp"
+                : "WhatsApp : non renseigné";
+    const color = (ok || nok) ? "#2e7d32" : "#c62828";
+    rows += `
+      <tr>
+        <td style="padding:8px;border:1px solid #cccccc;font-size:13px;color:#333;">Groupes WhatsApp</td>
+        <td style="padding:8px;border:1px solid #cccccc;font-size:13px;font-weight:bold;color:${color};text-align:center;">${label}</td>
+      </tr>`;
+  }
+
+  // Droit à l'image
+  if (isVisible('d_imageRights')) {
+    rows += line("Droit à l'image",
+                 document.getElementById('i_imageRights').checked);
+  }
+
+  // Caution clé de casier
+  if (isVisible('d_caution')) {
+    rows += line("Modalités de caution (clé de casier)",
+                 document.getElementById('i_caution').checked);
+  }
+
+  // Signature
+  if (isVisible('d_signUp')) {
+    rows += line("Validation et signature de la demande",
+                 document.getElementById('i_signature').checked);
+  }
+
+  if (!rows) return ""; // aucun engagement à afficher
+
+  return `
+    <tr>
+      <td style="padding:20px 30px 0;">
+        <h3 style="margin:0 0 10px;color:#333;font-size:16px;">Engagements</h3>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+          <thead>
+            <tr style="background-color:#4AACC6;color:#ffffff;">
+              <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Engagement</th>
+              <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:center;">Statut</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </td>
+    </tr>`;
+}
+
+
+/*function f_generatePDF() {
   console.log("[f_generatePDF]");
 
   // Élément à capturer : ici tout le body, ou un conteneur précis
@@ -1449,7 +1684,7 @@ function f_generatePDF() {
 
     return doc.output("blob");
   });
-}
+}*/
 
 
 
@@ -1459,35 +1694,24 @@ function f_generatePDF() {
 function f_sendEmail() {
   console.log("[f_sendEmail()]");
 
-  f_generatePDF().then((pdfBlob) => {
-    const firstEmail = f_getFirstEmail();
-    const reader = new FileReader();
+  const firstEmail = f_getFirstEmail();
 
-    reader.onload = function() {
-      const base64PDF = reader.result.split(',')[1];
+  const templateParams = {
+    to_email: "cyrille.kehl@gmail.com",
+    user_email: firstEmail,
+    message: "Nouvelle demande d'adhésion",
+    html_content: f_buildEmailHtml()
+  };
 
-      const templateParams = {
-        to_email: "cyrille.kehl@gmail.com",
-        user_email: firstEmail,
-        message: "Nouvelle demande d'adhésion",
-        attachement: base64PDF
-      };
-
-      emailjs.init("2guZj7PKd8GsJG4no");
-      emailjs.send("service_s5kskmc", "template_qkyeghb", templateParams)
-        .then(() => alert("✅ Email envoyé avec succès !"))
-        .catch((error) => {
-          alert("❌ Erreur lors de l'envoi");
-          console.log(error);
-        });
-    };
-
-    reader.readAsDataURL(pdfBlob);
-  })
-  .catch((error) => {
-    console.error("Erreur génération PDF:", error);
-  });
+  emailjs.init("2guZj7PKd8GsJG4no");
+  emailjs.send("service_s5kskmc", "template_qkyeghb", templateParams)
+    .then(() => alert("✅ Email envoyé avec succès !"))
+    .catch((error) => {
+      alert("❌ Erreur lors de l'envoi");
+      console.log(error);
+    });
 }
+
 
 
 
