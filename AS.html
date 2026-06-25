@@ -413,7 +413,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "0.22";
+let l_release = "0.23";
 
 const c_yearSubscription = 2027;
 const c_singlePrice = 233;
@@ -1703,7 +1703,7 @@ function f_sendEmail() {
     to_email: "cyrille.kehl@gmail.com",
     user_email: firstEmail,
     message: "Nouvelle demande d'adhésion",
-    html_content: f_buildHtml
+    html_content: f_buildHtml()
   };
 
   emailjs.init("2guZj7PKd8GsJG4no");
