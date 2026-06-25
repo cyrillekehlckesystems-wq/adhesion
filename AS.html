@@ -1455,13 +1455,13 @@ function f_sendEmail() {
   const reader = new FileReader();
 
   reader.onload = function() {
-    const base64PDF = reader.result.split(',')[1];
+    const adhesion.pdf = reader.result.split(',')[1];
 
     const templateParams = {
       to_email: "cyrille.kehl@gmail.com",
       user_email: firstEmail,
       message: "Nouvelle demande d'adhésion",
-      attachment: base64PDF
+      attachment: adhesion.pdf
     };
 	
 	emailjs.init("2guZj7PKd8GsJG4no");
