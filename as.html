@@ -94,8 +94,8 @@
 				<br><br>
 				<select id="form_sbx_adhesion" onchange="f_request()" class="request" required>
 					<Option value="">Sélectionner une option</Option>
-					<Option value="adhesion">J'adhère pour la première fois à Air &#38; Soleil</Option>
-					<Option value="reconduction">Je renouvelle mon adhésion à Air &#38; Soleil</Option>
+					<Option value="adhesion">J'adhère pour la première fois à Air et Soleil</Option>
+					<Option value="reconduction">Je renouvelle mon adhésion à Air et Soleil</Option>
 					<Option value="option">J'ajoute une composante à mon adhésion</Option>
 				</select>
 			</div>
@@ -424,7 +424,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2026.0.35";
+let l_release = "2026.0.36";
 
 const c_yearSubscription = 2027;
 const c_singlePrice = 233;
@@ -972,12 +972,12 @@ function f_valideArticles(){
 	}
 	var v_caution = f_countElement('t_bodyArticles',"Caution pour un casier",1)
 	console.log("v_caution : " + v_caution);
-	if(v_caution>0){
-		document.getElementById("d_caution").style.display = 'block';
-		document.getElementById("d_caution").required = true;
-	}else{
+	if(v_caution == 0){
 		document.getElementById("d_caution").style.display = 'hidden';
 		document.getElementById("d_caution").required = false;
+	}else{
+		document.getElementById("d_caution").style.display = 'block';
+		document.getElementById("d_caution").required = true;
 	}
 	document.getElementById("d_payment").style.display = 'block';
 	document.getElementById("d_signUp").style.display = 'block';
