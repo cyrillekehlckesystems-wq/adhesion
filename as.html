@@ -103,7 +103,7 @@
 
 		
 			<div id="d_members" hidden>
-			<label class="subtitle">Liste des adhérents :</label>
+			<label class="subtitle">Liste des adhérents : (pour ajouter des membres, cliquer sur le bouton ➕)</label>
 				<table id="t_tableMembers" class="blue">
 					<thead>
 						<tr>
@@ -137,7 +137,7 @@
 			<br><br>
 			<!-- LISTE DES OPTIONS -->
 			<div id="d_articles" hidden>
-				<label class="subtitle">Liste des composantes :</label>
+				<label class="subtitle">Liste des composantes : (pour ajouter des composantes, cliquer sur le bouton ➕)</label>
 				<table id='t_tableArticles' class="blue">
 					<thead>
 						<tr>
@@ -424,7 +424,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2026.0.33";
+let l_release = "2026.0.34";
 
 const c_yearSubscription = 2027;
 const c_singlePrice = 233;
@@ -1627,7 +1627,7 @@ function f_sendEmail() {
 	const c_firstEmail = f_getFirstEmail();
 	const c_firstName = f_getFirstName();
 	const obj_suscriptionType = document.getElementById('form_sbx_adhesion');
-	const c_subType = obj_suscriptionType.options[obj_suscriptionType.selectedIndex].value;
+	const c_subType = obj_suscriptionType.options[obj_suscriptionType.selectedIndex].innerHTML;
 	var v_message = c_subType + " : " + c_firstName
 	
   const templateParams = {
