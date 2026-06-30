@@ -424,7 +424,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2026.0.30";
+let l_release = "2026.0.31";
 
 const c_yearSubscription = 2027;
 const c_singlePrice = 233;
@@ -1626,8 +1626,9 @@ function f_sendEmail() {
 	console.log("[f_sendEmail()]");
 	const c_firstEmail = f_getFirstEmail();
 	const c_firstName = f_getFirstName();
-	const c_message = element.getElementById("form_sbx_adhesion").value;
-	var v_message = c_message + " : " + c_firstName
+	const obj_suscriptionType = document.getElementById('form_sbx_adhesion');
+	const c_subType = obj_suscriptionType.options[obj_suscriptionType.selectedIndex].value;
+	var v_message = c_subType + " : " + c_firstName
 	
   const templateParams = {
     to_email: "cyrille.kehl.ckesystems@gmail.com",
