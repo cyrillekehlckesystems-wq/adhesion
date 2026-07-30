@@ -424,7 +424,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2026.0.45";
+let l_release = "2026.0.46";
 
 const c_yearSubscription = 2026;
 const c_singlePrice = 233;
@@ -1593,33 +1593,26 @@ function f_buildHtml() {
 		  <!-- PAYEMENT -->
 		  <tr>
             <td style="padding:10px 15px 0;">
-              <h3 style="margin:0 0 2px;color:#333;font-size:16px;">Composantes de l'adhésion</h3>
+              <h3 style="margin:0 0 2px;color:#333;font-size:16px;">Modes de Règlement et Echéance</h3>
 				<table>
-					<thead>
-						<tr>
-						<th>Modes de Règlement et Echéance</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Je peux régler mon adhésion et ses composantes selon l'un des mode de règlements suivants:
-								<ul>
-									<li>Par chèque à l'ordre de <i>Air et Soleil</i> envoyé par courrier à <br><b><dd>M. Cyrille Kehl<br>80, rue du général de Gaulle<br>95120 Ermont,</b></li>
-									<li>Par virement bancaire à :</li>
-										<ul>
-											<li>Destinataire :<b>ASSOCIATION CULTURISTE AIR ET SOLEIL</b></li>
-											<li>IBAN : <b>FR76 3006 6101 3200 0205 9250 138</b></li>
-											<li>BIC : <b>CMCIFRPP</b></li>
-											<li id="l_info01"></li>
-										</ul>
-									<li>En espèce à la buvette</li>
-								</ul>et selon l'échéance suivante :<ul>
-									<li id="l_info02"></li>
-									<li><b>Comptant</b> au moment de l'adhésion pour toute <b>nouvelle d'adhésion et composantes. </b> Pour toute dérogation, consulter la trésorière.</li>
-								</ul>
-							</td>
-						</tr>
-					</tbody>
+					<tr>
+						<td style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Je peux régler mon adhésion et ses composantes selon l'un des mode de règlements suivants:
+							<ul>
+								<li>Par chèque à l'ordre de <i>Air et Soleil</i> envoyé par courrier à <br><b><dd>M. Cyrille Kehl<br>80, rue du général de Gaulle<br>95120 Ermont,</b></li>
+								<li>Par virement bancaire à :</li>
+									<ul>
+										<li>Destinataire :<b>ASSOCIATION CULTURISTE AIR ET SOLEIL</b></li>
+										<li>IBAN : <b>FR76 3006 6101 3200 0205 9250 138</b></li>
+										<li>BIC : <b>CMCIFRPP</b></li>
+										<li id="l_info01"></li>
+									</ul>
+								<li>En espèce à la buvette</li>
+							</ul>et selon l'échéance suivante :<ul>
+								<li id="l_info02"></li>
+								<li><b>Comptant</b> au moment de l'adhésion pour toute <b>nouvelle d'adhésion et composantes. </b> Pour toute dérogation, consulter la trésorière.</li>
+							</ul>
+						</td>
+					</tr>
 				</table>
 			</td>
 		</tr>
