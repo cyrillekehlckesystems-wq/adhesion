@@ -432,7 +432,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2026.1.06";
+let l_release = " beta 2026.1.07";
 
 const c_yearSubscription = 2026;
 const c_singlePrice = 233;
@@ -827,8 +827,8 @@ function f_autoAddArticles(){
 		const c_birthDate = obj_tbodyMembers.rows[i].cells[5].textContent;
 		const c_ffnLicensePrice = obj_tbodyMembers.rows[i].cells[11].textContent;
 		const c_age = f_calculAge(c_birthDate);
-		if(c_age > 25 && c_status === "Adulte seul(e)"){v_countAs++;}
-		if(c_age <= 25 && c_age >= 18 && c_status === "Adulte seul(e)"){v_countJa++;}
+		if(c_age >= 25 && c_status === "Adulte seul(e)"){v_countAs++;}
+		if(c_age < 25 && c_age >= 18 && c_status === "Adulte seul(e)"){v_countJa++;}
 		if(c_status === "Adulte en couple"){v_countAc++;}
 		if(c_ffnLicensePrice === "Non" && c_age >= 18){v_countFfn++}
 	}
