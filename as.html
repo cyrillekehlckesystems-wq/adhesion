@@ -432,7 +432,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2026.1.04";
+let l_release = "2026.1.05";
 
 const c_yearSubscription = 2026;
 const c_singlePrice = 233;
@@ -608,6 +608,8 @@ function f_OpenAddMembers(){
 		document.getElementById("form_txt_city").required = false;
 		document.getElementById("form_yn_ffnLicense").hidden = true;
 		document.getElementById("form_yn_ffnLicense").required = false;
+		document.getElementById("form_txt_ffnNumber").hidden = true;
+		document.getElementById("form_txt_ffnNumber").required = false;
 	}else{
 		document.getElementById("form_sbx_statut").hidden = false;
 		document.getElementById("form_sbx_statut").required = true;
@@ -627,6 +629,8 @@ function f_OpenAddMembers(){
 		document.getElementById("form_yn_ffnLicense").hidden = false;
 		document.getElementById("form_yn_ffnLicense").required = true;
 		document.getElementById("form_yn_ffnLicense").options[0].selected = true;
+		document.getElementById("form_txt_ffnNumber").hidden = true;
+		document.getElementById("form_txt_ffnNumber").required = false;
 	}
 	/*Masque ou montre la coche "Recopier l'adresse précedente" en fonction
 	du nombre de lignes remplies dans le tableau des adhérents */
