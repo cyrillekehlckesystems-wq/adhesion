@@ -118,7 +118,7 @@
 							<th>Ville</th>
 							<th>Adresse électronique</th>
 							<th>Numéro de téléphone</th>
-							<th>Carte FFN</th>
+							<th>Déja licencié(e) FFN</th>
 						</tr>
 					</thead>
 					<tbody id="t_bodyMembers"  class="member">
@@ -339,7 +339,7 @@
 					<input type="email" id="form_mel_email" placeholder="Messagerie électronique (E-mail)" required>
 					<input id="form_pho_phone" pattern="^\+?(?:\d\s*){10,11}$" placeholder="Numéro de Téléphone" required>
 					<select id="form_yn_ffnLicense" required>
-						<option value="" selected>Carte FFN</option>
+						<option value="" selected>Je dispose dèja d'une licence FFN</option>
 						<option value="Oui">Oui</option>
 						<option value="Non">Non</option>
 					</select>
@@ -424,7 +424,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2026.1.01";
+let l_release = "2026.1.02";
 
 const c_yearSubscription = 2026;
 const c_singlePrice = 233;
@@ -794,9 +794,9 @@ function f_autoAddArticles(){
 		const c_ffnLicensePrice = obj_tbodyMembers.rows[i].cells[11].textContent;
 		const c_age = f_calculAge(c_birthDate);
 		if(c_age > 25 && c_status === "Adulte seul(e)"){v_countAs++;}
-		if(c_age < 25 && c_age >= 18 && c_status === "Adulte seul(e)"){v_countJa++;}
+		if(c_age <= 25 && c_age >= 18 && c_status === "Adulte seul(e)"){v_countJa++;}
 		if(c_status === "Adulte en couple"){v_countAc++;}
-		if(c_ffnLicensePrice === "Oui" && c_age >= 18){v_countFfn++}
+		if(c_ffnLicensePrice === "Non" && c_age >= 18){v_countFfn++}
 	}
 	//add articles in articale table
 	if (v_countAs > 0){f_addTableArticle("Adhésion(s) adulte seul(e)",v_countAs,c_singlePrice,false,"disabled","disabled");}
@@ -1552,7 +1552,7 @@ function f_buildHtml() {
                     <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Adresse</th>
                     <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:left;">E-mail</th>
                     <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:center;">Tél.</th>
-                    <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:center;">FFN</th>
+                    <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:center;">Licencié(e) FFN</th>
                   </tr>
                 </thead>
                 <tbody>${memberRows || '<tr><td colspan="7" style="padding:10px;text-align:center;color:#999;font-size:12px;">Aucun adhérent</td></tr>'}</tbody>
@@ -1659,7 +1659,7 @@ function f_sendEmail() {
 	var v_message = c_subType + " : " + c_firstName
 	
   const templateParams = {
-    to_email: "cyrille.kehl@icloud.com;" + c_firstEmail,
+    to_email: "airetsoleil95@gmail.com;" + c_firstEmail,
     user_email: c_firstEmail,
     message: v_message,
     html_content: f_buildHtml()
