@@ -118,7 +118,7 @@
 							<th>Ville</th>
 							<th>Adresse électronique</th>
 							<th>Numéro de téléphone</th>
-							<th>Déja licencié(e) FFN</th>
+							<th>Déjà licencié(e) FFN</th>
 						</tr>
 					</thead>
 					<tbody id="t_bodyMembers"  class="member">
@@ -338,11 +338,19 @@
 					<input id="form_txt_city" placeholder="Ville" required>
 					<input type="email" id="form_mel_email" placeholder="Messagerie électronique (E-mail)" required>
 					<input id="form_pho_phone" pattern="^\+?(?:\d\s*){10,11}$" placeholder="Numéro de Téléphone" required>
-					<select id="form_yn_ffnLicense" required>
-						<option value="" selected>Je dispose dèja d'une licence FFN</option>
-						<option value="Oui">Oui</option>
-						<option value="Non">Non</option>
-					</select>
+					<table id="form_tb_ffnLicense" class="invborder">
+						<tr id="form_tr_ffnLicense">
+							<td  class="birthday" width="220px"><label>Je dispose dèja d'une licence FFN</label></td>
+							<td  class="birthday" width="280px">
+								<select id="form_yn_ffnLicense" onchange="f_fillFfnNumber()" required>
+									<option value="" selected>Sélectionner une réponse...</option>
+									<option value="Oui">Oui</option>
+									<option value="Non">Non</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<input id="form_txt_ffnNumber" placeholder="Numéro de la licence FFN" hidden required>
 					<button><input type="submit" value="Valider" hidden>Valider</button>
 					<button onclick="f_closeModalMembers()">Annuler</button>
 				</form>
@@ -424,7 +432,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2026.1.02";
+let l_release = "2026.1.03";
 
 const c_yearSubscription = 2026;
 const c_singlePrice = 233;
@@ -516,9 +524,15 @@ function f_openEditMembers(btn) {
 	form_txt_city.value = cells[8].textContent;
 	form_mel_email.value = cells[9].textContent;
 	form_pho_phone.value = cells[10].textContent;
-	form_yn_ffnLicense.value = cells[11].textContent;
+	if (cells[11].textContent === "Non"){
+		form_yn_ffnLicense.value = cells[11].textContent;
+	} else {
+		form_yn_ffnLicense.value = "Oui";
+		form_txt_ffnNumber.value = cells[11].textContent;
+	}
+		
 	document.getElementById('modal-title_members').textContent = 'Modifier la personne';
-	document.getElementById('modal').style.display = 'block';
+	document.getElementById('modal_members').style.display = 'block';
 }
 
 // -------------------------------------------------------------------------------
@@ -537,7 +551,12 @@ function f_fillRow(tr) {
 	c[8].textContent = form_txt_city.value;
 	c[9].textContent = form_mel_email.value;
 	c[10].textContent = form_pho_phone.value;
-	c[11].textContent = form_yn_ffnLicense.value;
+	if (form_yn_ffnLicense.value === "Oui"){
+		c[11].textContent = form_txt_ffnNumber.value;
+	} else {
+		c[11].textContent = form_yn_ffnLicense.value;
+		form_txt_ffnNumber.value = "";
+	 }
 }
 
 // -------------------------------------------------------------------------------
@@ -765,7 +784,17 @@ function f_optionFields(){
 	}
 }
 
-
+function f_fillFfnNumber(){
+	console.log("[f_fillFfnNumber]");
+	const c_ffnValue = document.getElementById("form_yn_ffnLicense").value;
+	if(c_ffnValue === "Oui"){
+		document.getElementById("form_txt_ffnNumber").hidden = false;
+		document.getElementById("form_txt_ffnNumber").required = true;
+	}else{
+		document.getElementById("form_txt_ffnNumber").hidden = true;
+		document.getElementById("form_txt_ffnNumber").required = false;
+	}
+}
 // ===============================================================================
 // 3. OPTIONS SECTION
 // ===============================================================================
