@@ -432,7 +432,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2026.1.05";
+let l_release = "2026.1.06";
 
 const c_yearSubscription = 2026;
 const c_singlePrice = 233;
@@ -608,6 +608,7 @@ function f_OpenAddMembers(){
 		document.getElementById("form_txt_city").required = false;
 		document.getElementById("form_yn_ffnLicense").hidden = true;
 		document.getElementById("form_yn_ffnLicense").required = false;
+		document.getElementById("form_tr_ffnLicense").hidden = true;
 		document.getElementById("form_txt_ffnNumber").hidden = true;
 		document.getElementById("form_txt_ffnNumber").required = false;
 	}else{
@@ -629,6 +630,7 @@ function f_OpenAddMembers(){
 		document.getElementById("form_yn_ffnLicense").hidden = false;
 		document.getElementById("form_yn_ffnLicense").required = true;
 		document.getElementById("form_yn_ffnLicense").options[0].selected = true;
+		document.getElementById("form_tr_ffnLicense").hidden = false;
 		document.getElementById("form_txt_ffnNumber").hidden = true;
 		document.getElementById("form_txt_ffnNumber").required = false;
 	}
