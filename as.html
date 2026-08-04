@@ -432,7 +432,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2026.1.03";
+let l_release = "2026.1.04";
 
 const c_yearSubscription = 2026;
 const c_singlePrice = 233;
@@ -450,7 +450,6 @@ document.getElementById("l_info01").innerHTML = "Objet : <b>ADHESION " + c_yearS
 let v_info01 = "Objet : <b>ADHESION " + c_yearSubscription + "</b>";
 document.getElementById("l_info02").innerHTML = "<b>Comptant ou en plusieurs fois</b> avant le 30 avril " + c_yearSubscription + " pour un <b>renouvellement</b>,";
 let v_info02 = "<b>Comptant ou en plusieurs fois</b> avant le 30 avril " + c_yearSubscription + " pour un <b>renouvellement</b>,";
-
 
 // ===============================================================================
 // 1. TYPE REQUEST SECTION
@@ -1537,7 +1536,7 @@ function f_buildHtml() {
 	const c_signature = document.getElementById("i_signature").checked;
  	let v_signature = (c_signature) ?`
 		<tr style="background-color:${bg};">
-			<td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;"><input type="checkbox" checked> Je valide et signe ma demande d'adhésion et ses composantes.</td>
+			<td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;"><input type="checkbox" checked> Je valide et signe ma demande d'adhésion et ses composantes. ` + new Date() + `</td>
 		</tr>` : ``;	 
   
 
