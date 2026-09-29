@@ -301,7 +301,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<input type="submit"  id="i_finalValidation" onclick="f_sendEmail()" value="J'envoie ma demande" class="inputproperties">
+					<input type="submit"  id="i_finalValidation" onclick="f_sendEmail(event)" value="J'envoie ma demande" class="inputproperties"> <!-- ajout de Event -->
 				</div>
 			</form>
 		</div>
@@ -432,7 +432,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = " 2027.0.0";
+let l_release = " 2027.0.1";
 
 const c_yearSubscription = 2027;
 const c_singlePrice = 209;
@@ -1684,7 +1684,9 @@ function f_buildHtml() {
 // -------------------------------------------------------------------------------
 // 6.4. SEND EMAIL
 // -------------------------------------------------------------------------------
-function f_sendEmail() {
+function f_sendEmail(e) {
+
+	if (e) e.preventDefault(); //ajout
 	console.log("[f_sendEmail()]");
 	const c_firstEmail = f_getFirstEmail();
 	const c_firstName = f_getFirstName();
