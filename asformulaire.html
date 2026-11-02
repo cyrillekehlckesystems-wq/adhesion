@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Tableau avec ajout et édition via fenêtre</title>
+		<style>
+		
+			/* MOBILE */
+			@media (max-width: 600px) {
+			body { font-size: 14px; }
+
+			label.title { font-size: 18px; }
+			label.as { font-size: 22px; }
+			label.cnfc { font-size: 12px; }
+			}
+			
+			select.request { width: 100%;padding: 8px; font-size: 16px;}
+			body { font-family: lora, sans-serif; margin: 20px; }
+			tbody.member {font-size: 12px;}
+			thead {color: white;}
+			table.blue { border-collapse: collapse; width: 100%; margin-top: 15px;}
+			table.invborder {border-collapse: collapse; width: 100%; border: none; }
+			th, td { border: 1px solid #ccc; padding: 6px; vertical-align: top; }
+			td.address {font-size: 12px; font-family: Arial; color: gray; border:none;}
+			td.birthday {border:none; font-size: 12px; margin: 0px; padding: 0px; text-align: center;}
+			td.noborder {border:none; margin: 0px;}
+			th { background-color: #4AACC6; }
+			.actions button { margin-right: 4px; cursor: pointer; }
+			.hidden { display:none; }
+			input[required]:invalid { box-shadow: 0 0 3px 1px red }
+			textarea[required]:invalid { box-shadow: 0 0 3px 1px red }
+			select[required]:invalid { box-shadow: 0 0 3px 1px red }
+			td.financial{ text-align: right; }
+			td.number{ text-align: center; }
+			div.article {text-align: justify; font-family:Arial;}
+			div.head {text-align:center; border:none; margin: 0px;}
+			label.subtitle{font-weight: bold;}
+			label.title {font-weight: bold; font-size: 25px; font-family: Comic Sans MS; text-align:center;}
+			label.as {font-weight: bold; font-size: 40px; font-family: Arial; text-align:center;}
+			label.cnfc {font-weight: bold; font-size: 20px; font-family: Comic Sans MS; color: gray; text-align:center;}
+			label.release {font-weight: bold; font-size: 10px; font-family: Arial; text-align:center;}
+			select.request {font-size: 16px; font-family: lora, sans-serif;}
+			button.buttonproperties {font-size: 16px; font-family: lora, sans-serif;}
+			input.inputproperties {font-size: 16px; font-family: lora, sans-serif;}
+			img {width: 100%; height: 150px; object-fit: cover;}
+
+
+			/* Fenêtre modale */
+			.modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); }
+			.modal-content { background:#fff; margin:0% auto; padding:10px; width:500px;}
+			.modal-content h2 { margin-top:0; }
+			.modal-content label { display:block; margin-top:6px; }
+			.modal-content input,
+			.modal-content textarea,
+			.modal-content select { width:100%; box-sizing:border-box; padding:5px;}
+		</style>
+	</head>
+	
+	<body>
+		<!-- TYPE DE DEMANDE -->
+		<div style="width:1000px">
+			<div id="d_head" class="head">
+				<table>
+					<tr>
+						<td class="address" style="width:200px">
+							<img src="logo.png" /><br>
+							Sentier des bois des Monts Frais<br>
+							95130 Franconville la Garenne
+						</td>
+						<td class="noborder" style="width:800px">
+							<br>
+							<label class="as">Association Air et Soleil</label><br><br>
+							<label class="cnfc">Club Naturiste Familial et Convivial</label><br><br>
+							<label id="l_title" class="title"></label><br><br>
+							<label id="l_release" class="release"></label><br><br>
+						</td>		
+					</tr>
+				</table>
+			</div>
+					<div class='article'>
+
+				<p align="right"><button class="buttonproperties" onclick="f_priceDisplay()">Tarifs</button>
+			</div>
+
+			<div id="d_members" hidden>
+			<label class="subtitle">Liste des adhérents : (pour ajouter des membres, cliquer sur le bouton ➕)</label>
+				<table id="t_tableMembers" class="blue">
+					<thead>
+						<tr>
+							<th>Action</th>
+							<th>Statut</th>
+							<th>Nom</th>
+							<th>Prénom</th>
+							<th>Adresse électronique</th>
+							<th>Numéro de téléphone</th>
+						</tr>
+					</thead>
+					<tbody id="t_bodyMembers"  class="member">
+					<!-- xxxxx -->
+											<tr>
+    <td class="actions">
+      <button class="hidden">➕</button>
+      <button id="b_removeOption-t_bodyMembers-0" onclick="this.closest('tr').remove()" disabled="">➖</button>
+      <button id="b_editOption-t_bodyMembers-0" onclick="f_openEditMembers(this)" disabled="">✏️</button>
+    </td>
+    <td>Adulte</td><td>Kehl</td><td>Cyrille</td><td>cyrille.kehl@gmail.com</td><td class="number">0661586473</td>
+  </tr><tr>
+    <td class="actions">
+      <button class="hidden">➕</button>
+      <button id="b_removeOption-t_bodyMembers-1" onclick="this.closest('tr').remove()" disabled="">➖</button>
+      <button id="b_editOption-t_bodyMembers-1" onclick="f_openEditMembers(this)" disabled="">✏️</button>
+    </td>
+    <td>Enfant (- de 18 ans)</td><td>Kehl</td><td>Aurore</td><td>aurore.kehl@icloud.com</td><td class="number">0758965485</td>
+  </tr>
+  <!-- xxxxx -->
+						<tr class="new-row">
+							<td class="actions">
+								<button disabled id="b_addMember" onclick="f_OpenAddMembers()">➕</button>
+								<button disabled>➖</button>
+								<button disabled>✏️</button>
+							</td>
+							<td colspan="5"></td>
+						</tr>
+					</tbody>
+				</table>
+				<button id="b_closeTableMembers" onclick="f_disableTableMembers()" class="buttonproperties" >J'ai embarqué tout le monde dans l'aventure, je valide</button>
+			<!--	<button id="b_closeTableMembers" onclick="f_disableTableMembers()" class="buttonproperties" disabled>J'ai embarqué tout le monde dans l'aventure, je valide</button> -->
+			</div>
+			<br><br>
+			<!-- LISTE DES OPTIONS -->
+			<div id="d_articles" hidden>
+				<label class="subtitle">Liste des composantes : (pour ajouter des composantes, cliquer sur le bouton ➕)</label>
+				<table id='t_tableArticles' class="blue">
+					<thead>
+						<tr>
+							<th>Action</th>
+							<th style="display:none;">Value</th>
+							<th>Désignation</th>
+							<th>Quantité</th>
+							<th>Prix unitaire</th>
+							<th>Total ligne</th>
+						</tr>
+					</thead>
+					<tbody id="t_bodyArticles">
+						<!-- Pré‑ligne vide (Nom modifiable) -->
+						<tr class="new-row">
+							<td class="actions">
+								<button id="b_addOption" onclick="f_openAddArticle()">➕</button>
+								<button disabled>➖</button>
+								<button disabled>✏️</button>
+							</td>
+							<td colspan="5"></td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="blue">
+					<tr>
+						<td>Total de mes composantes</td>
+						<td id="t_totalPrice" class='financial'></td>
+					</tr>
+				</table>
+				<button id="b_valideArticles" onclick="f_valideArticles()" class="buttonproperties" disabled>Je n'ai plus de composante à ajouter.</button>
+			</div>
+			<div id="d_payment" hidden>
+				<table class="blue">
+					<thead>
+						<tr>
+						<th>Modes de Règlement et Echéance</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Je peux régler ma participation selon l'un des mode de règlements suivants:
+								<ul>
+									<li>Par chèque à l'ordre de <i>Air et Soleil</i> envoyé par courrier à <br><b><dd>M. Cyrille Kehl<br>80, rue du général de Gaulle<br>95120 Ermont,</b></li>
+									<li>Par virement bancaire à :</li>
+										<ul>
+											<li>Destinataire :<b>ASSOCIATION CULTURISTE AIR ET SOLEIL</b></li>
+											<li>IBAN : <b>FR76 3006 6101 3200 0205 9250 138</b></li>
+											<li>BIC : <b>CMCIFRPP</b></li>
+											<li id="l_info01"></li>
+										</ul>
+									<li>En espèce en pré-paiement à la buvette</li>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<form>
+				<div id="d_personalData" class="article" hidden>
+					<table class="blue">
+						<thead>
+							<tr>
+							<th>Données Personnelles</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Les informations recueillies sur ce formulaire d'inscription ne sont pas enregistrées sur ce site ni sur aucun autre site.
+									Elles sont envoyées par courriel aux membres du bureau et sont utilisées pour la gestion administratives des adhérents et de la comptabilité dans des fichiers informatisés dans le nuage (cloud) privé de l'association (Microsoft OneDrive)et dans le logiciel de comptabilité sur un ordinateur local.
+									Les données collectées sont communiquées aux seuls membres du bureau de l'association, et sont conservées pendant 3 ans.
+									Vous pouvez accéder aux données vous concernant, les rectifier, demander leur effacement (en cas de résiliation) ou exercer votre droit à la limitation du traitement de vos données.
+									Consultez le site cnil.fr pour plus d’informations sur vos droits. Pour exercer ces droits ou pour toute question sur le traitement de vos données dans ce dispositif, vous pouvez contacter le bureau de l'association par mail airetsoleil95@gmail.com ou par téléphone au 07.82.20.71.82. Si vous estimez, après nous avoir contactés, que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL.<br>
+									<input type="checkbox" id="i_personalData" name="personalData" required>En cochant cette case, je confirme avoir pris connaissance de la gestion des données personnelles.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="d_signUp" class="article" hidden>
+					<table class="blue">
+						<thead>
+							<tr>
+							<th>Signature</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><input type="checkbox" id="i_signature" name="signature" required>En cochant cette case, je valide et signe ma demande.<br>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<input id="i_finalValidation" onclick="f_sendEmail()" value="J'envoie ma demande" class="inputproperties">
+				</div>
+			</form>
+		</div>
+
+		<!-- FENETRE SAISI DES ADHERENTS -->
+		<div id="modal_members" class="modal">
+			<div class="modal-content">
+				<h2 id="modal-title_members"></h2>
+				<form action="javascript:f_valideFormMembers(this)">
+					<select id="form_sbx_statut" onchange="f_optionFields()" required>
+						<option value="">Sélectionner un statut</option>
+						<option value="Adulte">Adulte</option>
+						<option value="Enfant (- de 18 ans)">Enfant (- de 18 ans)</option>
+					</select>
+					<input type="text" id="form_txt_lastName" placeholder="Nom" required>
+					<input type="text" id="form_txt_firstName" placeholder="Prénom" required>
+					<input type="email" id="form_mel_email" placeholder="Messagerie électronique (E-mail)" required>
+					<input id="form_pho_phone" pattern="^\+?(?:\d\s*){10,11}$" placeholder="Numéro de Téléphone" required>
+					<button><input type="submit" value="Valider" hidden>Valider</button>
+					<button onclick="f_closeModalMembers()">Annuler</button>
+				</form>
+			</div>
+		</div>
+
+		<!-- FENETRE SAISIE DES OPTIONS -->
+		<div id="modal_articles" class="modal">
+			<div class="modal-content">
+				<h2 id="modal-title_articles"></h2>
+				<form action="javascript:f_valideFormArticles(this);javascript:f_enableArticleButton()">
+
+					<select id="form_sbx_articles" required onchange='f_QuantitySelect();f_calculateArticles()'>
+					</select>
+					<select id="form_sbx_quantity" onchange='f_calculateArticles()' required>
+					</select>
+					<label>Prix Unitaire<input type="text" id="form_txt_priceUnit" disabled></label>
+					<label>Prix total<input type="text" id="form_txt_priceTotal" disabled></label>
+					<button><input type="submit" value="Valider" hidden>Valider</button>
+					<button onclick="f_closeModalArticles()">Annuler</button>
+				</form>
+			</div>
+		</div>
+		</form>
+		
+		<!-- FENETRE DES TARIFS -->
+		<div id="modal_prices" class='modal'>
+			<div class="modal-content">
+				<h2 id="modal-title_prices"></h2>
+				<table id="t_prices" class="blue">
+					<thead>
+						<tr>
+							<th>Composantes</th>
+							<th>Tarifs</th>
+						</tr>
+					</thead>
+				<tbody id="t_bodyPrices">
+
+				</tbody>
+			</table>
+			<button onclick="f_closeModalPrices()">Fermer</button>
+		</div>
+		
+		<!-- FENETRE REGLEMENT INTERIEUR -->
+		<div id="modal_regulation" class='modal'>
+			<div class="modal-content">
+				<h2 id="modal-title_regulation"></h2>
+			
+				
+			<button onclick="f_closeModalPrices()">Fermer</button>
+		</div>
+<script type="text/javascript" type="module" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script type="text/javascript">
+let v_mode = 'add';
+let v_modeOptions = 'add';
+let v_editedRow = null;
+let v_editedRowOptions = 'add';
+let l_release = "2027.0.01";
+
+const params = new URLSearchParams(window.location.search);
+const c_title = params.get("titre");
+
+let l_designations = params.get("designations");
+l_designations = l_designations.replace(/ent:/g,"Entrée:");
+l_designations = l_designations.replace(/pdr:/g,"Plat de résistance:");
+l_designations = l_designations.replace(/des:/g,"Dessert:");
+l_designations = l_designations.replace(/com:/g,"Complément:");
+l_designations = l_designations.replace(/aut:/g,"Autre:");
+const c_designationsSplit = l_designations.split(";");
+const c_designationsCount = c_designationsSplit.length;
+
+//calcule number or mandatory (xxx:)
+let l_mandatorylist = new Array();
+for(i = 0; i < c_designationsCount; i++){
+	let l_prefix = f_extractPrefix(c_designationsSplit[i],":");
+	const c_nb = l_mandatorylist.indexOf(l_prefix);
+	if (c_nb == -1){l_mandatorylist.push(l_prefix);}
+}
+const c_mandatory = l_mandatorylist.length;
+console.log("c_mandatory : " + c_mandatory);
+
+
+let l_prices = params.get("prix");
+const c_pricesSplit = l_prices.split(";");
+
+
+//built the Price Table
+//const obj_tbodyPrices = document.getElementById('t_bodyPrices');
+var v_rows = "";
+for ( i = 0 ; i <= c_designationsCount-1 ; i++){
+	//const c_row = "<tr><td>" + c_designationsSplit[i] + "</td><td>" + c_pricesSplit[i] + "</td></tr>";
+
+	const node_tr = document.createElement("tr");
+	document.getElementById('t_bodyPrices').appendChild(node_tr);
+	
+	const node_td1 = document.createElement("td");
+	const textnode1 = document.createTextNode( c_designationsSplit[i]);
+	node_td1.appendChild(textnode1);
+	document.getElementById('t_bodyPrices').appendChild(node_td1);
+	
+	const node_td2 = document.createElement("td");
+	const textnode2 = document.createTextNode(Number(c_pricesSplit[i]).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }));
+	node_td2.appendChild(textnode2);
+	document.getElementById('t_bodyPrices').appendChild(node_td2);
+	
+}
+
+document.getElementById("l_title").innerHTML = c_title;
+document.getElementById("l_release").innerHTML = "version  " + l_release ;
+document.getElementById("l_info01").innerHTML = "Objet : <b>" + c_title + "</b>";
+
+document.getElementById('b_addMember').disabled = false;
+document.getElementById('d_members').style.display = 'block';
+
+
+// ===============================================================================
+// 1. TYPE REQUEST SECTION
+// ===============================================================================
+
+// ===============================================================================
+// 2. MEMBERS SECTION
+// ===============================================================================
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// 2.1 MEMBERS LIST TABLE
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// -------------------------------------------------------------------------------
+// 2.1.1 ADDING A NEW ROW IN MEMBERS TABLE
+// -------------------------------------------------------------------------------
+function f_rowHtml(){
+	console.log("[f_rowHtml]");
+	const obj_tbodyMembers = document.getElementById('t_bodyMembers');
+	const c_newRow = (obj_tbodyMembers.rows.length)-1;
+	
+  return `
+    <td class="actions">
+      <button class="hidden">➕</button>
+      <button id="b_removeOption-t_bodyMembers-`+ c_newRow + `" onclick="this.closest('tr').remove()">➖</button>
+      <button id="b_editOption-t_bodyMembers-`+ c_newRow + `" onclick="f_openEditMembers(this)">✏️</button>
+    </td>
+    <td></td><td></td><td></td></td><td><td class="number"></td>
+  `;
+}
+
+// -------------------------------------------------------------------------------
+// 2.1.2. EDIT THE MEMBER (OPEN THE MODAL MEMBER FORM FOR MODIFICATION)
+// -------------------------------------------------------------------------------
+function f_openEditMembers(btn) {
+	console.log("[f_openEditMembers]");
+	v_mode = 'edit';
+	v_editedRow = btn.closest('tr');
+	const cells = v_editedRow.children;
+	form_sbx_statut.value = cells[1].textContent;
+	form_txt_lastName.value = cells[2].textContent;
+	form_txt_firstName.value = cells[3].textContent;
+	form_mel_email.value = cells[4].textContent;
+	form_pho_phone.value = cells[5].textContent;
+	document.getElementById('modal-title_members').textContent = 'Modifier la personne';
+	document.getElementById('modal').style.display = 'block';
+}
+
+// -------------------------------------------------------------------------------
+// 2.1.3 FILL DATA FROM MODAL MEMBERS FORM TO MEMBERS TABLE
+// -------------------------------------------------------------------------------
+function f_fillRow(tr) {
+	console.log("[f_fillRow]");
+	const c = tr.children;
+	c[1].textContent = form_sbx_statut.value;
+	c[2].textContent = form_txt_lastName.value;
+	c[3].textContent = form_txt_firstName.value;
+	c[4].textContent = form_mel_email.value;
+	c[5].textContent = form_pho_phone.value;
+}
+
+// -------------------------------------------------------------------------------
+// 2.2.4. DISABLE MEMBERS TABLE
+// -------------------------------------------------------------------------------
+function f_disableTableMembers(){
+	console.log("[f_disableTableMembers]");
+	f_disableButtons("t_bodyMembers");
+	document.getElementById("b_addMember").disabled = true;
+	document.getElementById("b_closeTableMembers").disabled = true;
+	document.getElementById("d_articles").style.display = "inline";
+	f_autoAddArticles();
+	f_totalPrice();
+
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// 2.2 MODAL MEMBERS FORM
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// -------------------------------------------------------------------------------
+// 2.2.1. OPEN MODAL FORM ACCORDING THE TYPE REQUEST AND FILL THE SELECT ARTICLE
+// -------------------------------------------------------------------------------
+function f_OpenAddMembers(){
+	console.log("[f_OpenAddMembers]");
+	v_mode = 'add';
+	v_editedRow = null;
+	f_clearFormMembers();
+	document.getElementById('modal-title_members').textContent = 'Ajouter une personne';
+	document.getElementById('modal_members').style.display = 'block';
+	
+}
+
+// -------------------------------------------------------------------------------
+// 2.2.2 CLEAR THE MODAL MEMBERS FORM
+// -------------------------------------------------------------------------------
+function f_clearFormMembers() {
+	console.log("[f_clearFormMembers]");
+	document.querySelectorAll('#modal_members input, #modal_members textarea, #modal_members select').forEach(e => e.value = '');
+}
+
+// -------------------------------------------------------------------------------
+// 2.2.3. VALIDATE MODAL MEMBERS FORM (ADDING OR MODIFYING)
+// -------------------------------------------------------------------------------
+function f_valideFormMembers() {
+	console.log("[f_valideFormMembers]");
+	const obj_tbodyMembers = document.getElementById('t_bodyMembers');
+	if (v_mode === 'add') {
+		const obj_tr = document.createElement('tr');
+		obj_tr.innerHTML = f_rowHtml();
+		f_fillRow(obj_tr);
+		obj_tbodyMembers.insertBefore(obj_tr, obj_tbodyMembers.lastElementChild);
+	} else if (v_mode === 'edit') {
+		f_fillRow(v_editedRow);
+	}
+	f_closeModalMembers();
+	document.getElementById("b_closeTableMembers").disabled = false;
+}
+
+// -------------------------------------------------------------------------------
+// 2.2.4 CLOSING THE MODAL MEMBER FORM
+// -------------------------------------------------------------------------------
+function f_closeModalMembers() {
+	console.log("[f_closeModalMembers]");
+	document.getElementById('modal_members').style.display = 'none';
+}
+	
+// -------------------------------------------------------------------------------
+// 2.2.5. CHANGE PROPERTIES OF EMAIL AND PHONE IF MEMBER IS LESS THAN 18
+// -------------------------------------------------------------------------------
+function f_optionFields(){
+
+	console.log("[f_optionFields]");
+	var v_status = document.getElementById("form_sbx_statut").value;
+	console.log(" - v_status : " + v_status);
+	if(v_status === "Enfant"){
+		document.getElementById("form_mel_email").required = false;
+		document.getElementById("form_pho_phone").required = false;
+	}else{
+		document.getElementById("form_mel_email").required = true;
+		document.getElementById("form_pho_phone").required = true;
+	}
+}
+
+// ===============================================================================
+// 3. OPTIONS SECTION
+// ===============================================================================
+
+// -------------------------------------------------------------------------------
+// 3.1.1. ADD AUTOMATIC ARTICLES
+// -------------------------------------------------------------------------------
+function f_autoAddArticles(){
+	console.log("[f_autoAddArticles]");
+	
+	
+	const c_adults = f_countElement("t_bodyMembers","Adulte",1)
+	const c_children = f_countElement("t_bodyMembers","Enfant (- de 18 ans)",1);
+	var v_members = c_adults + c_children;
+	
+	for(let i = 0; i< c_designationsCount; i++){
+		v_splitPrefix = f_extractPrefix(c_designationsSplit[i],":");
+		console.log("v_splitPrefix = " + v_splitPrefix);
+		if(v_splitPrefix === 'auto:'){
+			console.log("v_splitPrefix !");
+			f_addTableArticle(c_designationsSplit[i],v_members,c_pricesSplit[i],false,"disabled","disabled");
+		}
+	}
+	f_enableArticleButton();
+}
+
+// -------------------------------------------------------------------------------
+// 3.1.2. OPEN MODAL ARTICLE FORM
+// -------------------------------------------------------------------------------
+function f_openAddArticle() {
+	console.log("[f_openAddArticles]");
+	v_modeOptions = 'add';
+	v_editedRowOptions = null;
+	clearFormArticles();
+	document.getElementById('modal-title_articles').textContent = 'Ajouter une composante';
+	document.getElementById('modal_articles').style.display = 'block';
+
+	f_removeAllOptions("form_sbx_quantity");
+	f_addOption("form_sbx_articles","","Ajouter une composante...");
+	f_selectAvailableArticles();
+}
+
+// -------------------------------------------------------------------------------
+// 3.1.4. UPDATE EXISTING ARTICLE IN ARTICLE TABLE
+// -------------------------------------------------------------------------------
+ function f_updateArticle(c_designation,c_quantity,c_price,c_hidden ){
+	console.log("[f_updateArticle]");
+	console.log(" - c_designation : " + c_designation);
+	console.log(" - c_quantity: " + c_quantity);
+	console.log(" - c_price : " + c_price);
+	console.log(" - c_hidden : " + c_hidden);
+	const obj_element = document.getElementById('t_bodyArticles');
+	const c_lastRow = (obj_element.rows.length)-1;
+	for (i = 0; i < c_lastRow; i++) {
+		if(obj_element.rows[i].cells[1].textContent === c_designation){
+			var v_existingQantity = obj_element.rows[i].cells[2].textContent
+			var v_newQuantity = Number(v_existingQantity) + Number(c_quantity);
+			obj_element.rows[i].cells[3].textContent = v_newQuantity;
+			obj_element.rows[i].cells[4].textContent = (v_newQuantity * c_price).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+			obj_element.rows[i].hidden = c_hidden;
+		};
+	}
+ }
+ 
+// -------------------------------------------------------------------------------
+// 3.1.5. ADD A NEW ROW IN ARTICLE TABLE 
+// -------------------------------------------------------------------------------
+function f_rowHtmlArticles(c_disabled1,c_disabled2){
+	const obj_tbodyOptions = document.getElementById('t_bodyArticles');
+	const c_newRow = (obj_tbodyOptions.rows.length)-1;
+	
+  return `
+    <td class="actions">
+      <button class="hidden">➕</button>
+      <button id="b_removeOption-t_bodyArticles-`+ c_newRow + `" onclick="this.closest('tr').remove();f_totalPrice() "` + c_disabled1 +`>➖</button>
+      <button id="b_editOption-t_bodyArticles-`+ c_newRow + `" onclick="f_openEditArticle(this)" ` + c_disabled2 +`>✏️</button>
+    </td>
+	<td style="display:none;"><td></td></td><td class="number"></td><td class="financial"></td><td class="financial"></td>
+  `;
+}
+
+ 
+// -------------------------------------------------------------------------------
+// 3.1.7. FILL IN ARTICLE IN ARTICLE TABLE
+// -------------------------------------------------------------------------------
+function f_fillRowArticles(tr,c_designation,c_quantity,c_price) {
+	console.log("[f_fillRowArticles]");
+	console.log(" - c_designation : " + c_designation);
+	console.log(" - c_quantity : " + c_quantity);
+	console.log(" - c_price : " + c_price);
+	
+	const c_adults = f_countElement("t_bodyMembers","Adulte",1)
+	
+	const c = tr.children;
+	c[1].textContent = c_designation;
+	c[2].textContent = f_extractSufix(c_designation,":");
+	c[3].textContent = c_quantity;
+	c[4].textContent = Number(c_price).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+	c[5].textContent = (c_adults*c_price).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+ }
+
+// -------------------------------------------------------------------------------
+// 3.1.8. EDIT A ROW IN ARTICLE TABLE 
+// -------------------------------------------------------------------------------
+function f_openEditArticle(btn) {
+	console.log("[f_openEditArticle]");
+	v_modeOptions = 'edit';
+	v_editedRow = btn.closest('tr');
+	const cells = v_editedRow.children;
+	
+	f_removeAllOptions("form_sbx_articles");
+	f_addOption("form_sbx_articles",cells[1].textContent,cells[1].textContent);
+	
+	f_removeAllOptions("form_sbx_quantity");
+	f_QuantitySelect();
+		
+	form_sbx_quantity.value = cells[3].textContent;
+	form_txt_priceUnit.value = cells[4].textContent;
+	form_txt_priceTotal.value = cells[5].textContent;
+	console.log("cells[1].textContent : " + cells[1].textContent);
+	
+	document.getElementById('modal-title_articles').textContent = "Modifier la composante";
+	document.getElementById('modal_articles').style.display = 'block';
+}
+
+// -------------------------------------------------------------------------------
+// 3.1.9. VALIDATE ARTICLES
+// -------------------------------------------------------------------------------
+function f_valideArticles(){
+	console.log('f_valideArticles]');
+	document.getElementById('d_personalData').style.display = 'block'
+	document.getElementById('i_personalData').required = true;
+	document.getElementById("d_payment").style.display = 'block';
+	document.getElementById("d_signUp").style.display = 'block';
+	document.getElementById("i_finalValidation").hidden = true;
+	document.getElementById("b_valideArticles").disabled = true;
+	f_disableButtons("t_bodyArticles");
+
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// 3.2 ARTICLE MODAL FORM
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// -------------------------------------------------------------------------------
+// 3.2.1. VALIDATE ARTICLE
+// -------------------------------------------------------------------------------
+function f_valideFormArticles() {
+	console.log('[f_valideFormArticles]');
+	console.log(" - v_modeOptions : " + v_modeOptions);
+
+	var select = document.getElementById('form_sbx_articles');
+	const v_designation = select.options[select.selectedIndex].text;
+	const c_quantity = document.getElementById('form_sbx_quantity').value;
+	var v_unitPrice = document.getElementById('form_txt_priceUnit').value;
+	if (v_modeOptions === 'add') {
+		
+		const c_elementNumber = f_countElement('t_bodyArticles',v_designation,1);
+		if(c_elementNumber > 0){
+			f_updateArticle(v_designation,c_quantity,v_unitPrice,false)
+		}else{
+			f_addTableArticle(v_designation,c_quantity,v_unitPrice,false,"","");
+		}
+	} else if (v_modeOptions === 'edit') {
+		f_fillRowArticles(v_editedRow,v_designation,c_quantity,v_unitPrice);
+	}
+	f_totalPrice();
+	f_closeModalArticles();
+}
+
+// -------------------------------------------------------------------------------
+// 3.2.2. ADD ARTICLE FROM MODAL ARTICLE FORM TO ARTICLE TABLE
+// -------------------------------------------------------------------------------
+function f_addTableArticle(c_designation,c_quantity,c_price,c_hidden,c_disabled1,c_disabled2){
+	console.log("[f_AddTableArticles]");
+	console.log(" - c_designation : " + c_designation);
+	console.log(" - c_quantity : " + c_quantity);
+	console.log(" - c_price : " + c_price);
+	console.log(" - c_hidden : " + c_hidden);
+	
+	const obj_tbodyOptions = document.getElementById('t_bodyArticles');
+	const obj_tr = document.createElement('tr');
+	obj_tr.hidden = c_hidden;
+
+	obj_tr.innerHTML = f_rowHtmlArticles(c_disabled1,c_disabled2);
+
+	f_fillRowArticles(obj_tr,c_designation,c_quantity,c_price);
+	obj_tbodyOptions.insertBefore(obj_tr, obj_tbodyOptions.lastElementChild);
+}
+
+// -------------------------------------------------------------------------------
+// 3.2.3. CALCULATING SUBSCRIPTION TOTAL PRICE
+// -------------------------------------------------------------------------------
+function f_totalPrice(){
+	console.log("[f_totalPrice]");
+	const obj_tbodyOptions = document.getElementById('t_bodyArticles');
+	const c_lastRow = (obj_tbodyOptions.rows.length)-1;
+	var v_total = 0;
+	for (i = 0; i < c_lastRow; i++) {
+	 const c_rowPrice = obj_tbodyOptions.rows[i].cells[4].textContent;
+	 var newnumber = c_rowPrice.replace("€","");
+		newnumber = Number(newnumber.replace(",","."));
+		v_total = v_total + newnumber;
+	}
+	document.getElementById('t_totalPrice').textContent = v_total.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+}
+
+// -------------------------------------------------------------------------------
+// 3.2.4. SELECT AVAILABLE ARTICLE IN MODAL ARTICLE FORM
+// -------------------------------------------------------------------------------
+function f_selectAvailableArticles() {
+	
+	console.log("[f_selectAvailableArticles]");
+
+	let v_splitPrefix = "";
+	let v_itemInArticles = 0;
+	let v_quantityInArticles = 0;
+	let v_itemInMembers = f_countElement("t_bodyMembers","Adulte",1) + f_countElement("t_bodyMembers","Enfant (- de 18 ans)",1); 
+	
+	for(let i = 0; i< c_designationsCount; i++){
+
+		v_itemInArticles = f_countElement('t_bodyArticles',c_designationsSplit[i],1);
+		if(v_itemInArticles != 0 ){continue}
+		
+		v_splitPrefix = f_extractPrefix(c_designationsSplit[i],":");
+		v_quantityInArticles = f_countQuantity('t_bodyArticles',v_splitPrefix,1,3);
+		console.log(" - [" + i + "/" + c_designationsCount + "] - v_splitPrefix : " + v_splitPrefix);
+		console.log(" - v_quantityInArticles : " + v_quantityInArticles);
+		console.log(" - left article : " + (v_itemInMembers-v_quantityInArticles));
+		if(v_itemInMembers-v_quantityInArticles > 0){f_addOption("form_sbx_articles",i,c_designationsSplit[i])}
+		
+	}
+	
+}
+
+
+
+// -------------------------------------------------------------------------------
+// 3.2.5. CHANGE THE NUMBER OF QUANTITY ACCORDING THE NUMBER OF SAFE ALREADY SELECTED
+// -------------------------------------------------------------------------------
+function f_QuantitySelect(){
+
+	console.log("[f_QuantitySelect]");
+	
+	
+	var select = document.getElementById('form_sbx_articles');
+	const c_selectedArticle = select.options[select.selectedIndex].text;
+	//const c_selectedArticle = document.getElementById('form_sbx_articles').value;
+	console.log(" - c_selectedArticle : " + c_selectedArticle);
+	
+	const c_nb = c_selectedArticle.indexOf(":");
+	console.log (" - c_nb : " + c_nb);
+	var v_textToFind = ""
+	if(c_nb == -1){
+		v_textToFind = c_selectedArticle
+	}else{
+		v_textToFind = c_selectedArticle.substring(0,c_selectedArticle.indexOf(":")+1);
+	}
+	console.log (" - v_textToFind : " + v_textToFind);
+	
+	const v_countArticle = f_countQuantity('t_bodyArticles',v_textToFind,1,3);
+	console.log(" - v_countArticle : " + v_countArticle);
+	
+	const c_memberAdult = f_countElement("t_bodyMembers","Adulte",1,2);
+	console.log(" - c_memberAdult : " + c_memberAdult);
+	const c_memberChild = f_countElement("t_bodyMembers","Enfant (- de 18 ans)",1,2);
+	console.log(" - c_memberChild : " + c_memberChild);
+	var c_memberTotal = c_memberAdult + c_memberChild;
+	console.log(" - c_memberTotal : " + c_memberTotal);
+	var c_quantityLeft = c_memberTotal - v_countArticle;
+	console.log(" - c_quantityLeft : " + c_quantityLeft);
+	
+	f_removeAllOptions("form_sbx_quantity");
+	if(c_quantityLeft > 1){f_addOption("form_sbx_quantity","","Sélectionner une quantité...");}
+	for (i = 1 ; i <= c_quantityLeft ; i++){f_addOption("form_sbx_quantity",i,i);}
+}
+
+// -------------------------------------------------------------------------------
+// 3.2.6. Extract prefix
+// -------------------------------------------------------------------------------
+
+function f_extractPrefix(c_text,c_char){
+	console.log("[f_extractPrefix('" + c_text + "','" + c_char + "']");
+	const c_nb = c_text.indexOf(":");
+	console.log (" - c_nb : " + c_nb);
+	var v_textToFind = ""
+	if(c_nb == -1){
+		v_textToFind = c_text
+	}else{
+		v_textToFind = c_text.substring(0,c_text.indexOf(":")+1);
+	}
+	return v_textToFind;
+}
+
+// -------------------------------------------------------------------------------
+// 3.2.7. Extract sufix
+// -------------------------------------------------------------------------------
+
+function f_extractSufix(c_text,c_char){
+	console.log("[f_extractPrefix('" + c_text + "','" + c_char + "']");
+	const c_nb = c_text.indexOf(":");
+	console.log (" - c_nb : " + c_nb);
+	var v_textToFind = ""
+	if(c_nb == -1){
+		v_textToFind = c_text
+	}else{
+		v_textToFind = c_text.substring(c_text.indexOf(":")+1,c_text.length);
+	}
+	return v_textToFind;
+}
+
+
+
+// -------------------------------------------------------------------------------
+// 3.2.8. CALCULATE THE TOTAL OF THE ARTICLE
+// -------------------------------------------------------------------------------
+function f_calculateArticles(){
+	console.log("[f_calculateArticles]");
+	//const c_selectedOption = document.getElementById('form_sbx_articles').value;
+	const c_selectedOption = document.getElementById('form_sbx_articles').value;
+	console.log("c_selectedOption : " + c_selectedOption);
+	
+	const c_selectedQuantity = document.getElementById('form_sbx_quantity').value;
+	console.log("c_selectedQuantity : " + c_selectedQuantity);
+	
+	var v_price = c_pricesSplit[c_selectedOption];
+	console.log("v_price :" + v_price);
+	document.getElementById('form_txt_priceUnit').value = v_price;
+	if(c_selectedQuantity !=""){
+		document.getElementById('form_txt_priceTotal').value = v_price * Number(c_selectedQuantity);
+	}else{
+		document.getElementById('form_txt_priceTotal').value ="";
+	}
+}
+
+// -------------------------------------------------------------------------------
+// 3.2.9 CLOSING THE MODAL ARTICLE FORM
+// -------------------------------------------------------------------------------
+function f_closeModalArticles() {
+	console.log('[f_closeModalArticles]');
+	document.getElementById('modal_articles').style.display = 'none';
+	
+	
+}
+
+function f_enableArticleButton(){
+
+	console.log("[f_enableArticleButton]");
+	const c_adults = f_countElement("t_bodyMembers","Adulte",1)
+	const c_children = f_countElement("t_bodyMembers","Enfant (- de 18 ans)",1);
+	var v_members = c_adults + c_children;
+	
+	const c_article = f_countQuantity('t_bodyArticles',"*/*",1,3);
+	console.log(" - " + c_article + " >= " + (v_members*c_mandatory));
+	if(c_article >= (v_members*c_mandatory)){document.getElementById("b_valideArticles").disabled = false};
+}
+
+// -------------------------------------------------------------------------------
+// 3.2.10. CLEAR THE MODAL ARTICLE FORM
+// -------------------------------------------------------------------------------
+function clearFormArticles() {
+	console.log('[clearFormArticles]');
+	document.querySelectorAll('#modal_articles input, #modal_articles select').forEach(e => e.value = '');
+	f_removeAllOptions("form_sbx_articles");
+
+}
+
+// ===============================================================================
+// 4. PRICE SECTION
+// ===============================================================================
+// -------------------------------------------------------------------------------
+// 4.1. DISPLAY PRICE TABLE
+// -------------------------------------------------------------------------------
+
+function f_priceDisplay(){
+	console.log("[f_priceDisplay]");
+	document.getElementById('modal-title_prices').textContent = 'Tarifs des composantes';
+	document.getElementById('modal_prices').style.display = 'block';
+}
+
+// -------------------------------------------------------------------------------
+// 4.1. CLOSE PRICE TABLE
+// -------------------------------------------------------------------------------
+function f_closeModalPrices() {
+	console.log("[f_closeModalPrices]");
+	document.getElementById('modal_prices').style.display = 'none';
+}
+
+
+// ===============================================================================
+// 5. GENERAL SUB-FUNCTION
+// ===============================================================================
+
+// -------------------------------------------------------------------------------
+// 5.1. REMOVE ALL OPTIONS IN A SELECT
+// -------------------------------------------------------------------------------
+function f_removeAllOptions(v_value){
+	console.log("[f_removeAllOptions]");
+	console.log("v_value : " + v_value);
+	const obj_option = document.getElementById(v_value);
+	while (obj_option.options.length > 0) {obj_option.remove(0);}
+}
+
+// -------------------------------------------------------------------------------
+// 5.2. ADD AN OPTION IN A SELECT
+// -------------------------------------------------------------------------------
+function f_addOption(c_object,v_value,v_text){
+	console.log(" - [f_addOption]");
+	console.log("    - " + c_object + " / " + v_value + " / " + v_text);
+	const obj_option = document.getElementById(c_object);
+	const c_option = document.createElement("option");
+	c_option.value = v_value;
+	c_option.text = v_text;
+	obj_option.add(c_option, null);
+}
+
+// -------------------------------------------------------------------------------
+// 5.3. REMOVE AN OPTION IN A SELECT
+// -------------------------------------------------------------------------------
+function f_removeOption(c_object,v_value){
+	console.log("[f_removeOption]");
+	console.log(" - c_object : " + c_object);
+	console.log(" - v_value : " + v_value);
+	var obj_option = document.getElementById(c_object);
+	for (var i = 0; i < obj_option.length; i++) {
+                if (obj_option.options[i].value == v_value){obj_option.remove(i);}
+    }
+}
+
+// -------------------------------------------------------------------------------
+// 5.4. DISABLE ALL BUTTONS + AND - IN THE TABLE
+// -------------------------------------------------------------------------------
+function f_disableButtons(c_object){
+	console.log("[f_disableButtons]");
+	console.log(" - c_object : " + c_object);
+	const obj_select = document.getElementById(c_object);
+	const c_lastRow = (obj_select.rows.length)-1;
+	console.log(" - c_lastRow : " + c_lastRow);
+		
+	for (let i = 0; i < c_lastRow; i++) {
+		console.log("i : " + i);
+		console.log("b_removeOption-" + c_object + "-" + i);
+		document.getElementById("b_removeOption-" + c_object + "-" + i).disabled = true;
+		document.getElementById("b_editOption-" + c_object + "-" + i).disabled = true;
+	}
+}
+
+// -------------------------------------------------------------------------------
+// 5.5.COUNT THE NUMBER OF SAME ELEMENT IN THE TABLE
+// -------------------------------------------------------------------------------
+ function f_countElement(c_object,c_researchedValue,c_cellValue){
+	console.log("[f_countElement('" + c_object + "','" + c_researchedValue + "','" + c_cellValue + "']");
+	const obj_object = document.getElementById(c_object);
+	const c_lastRow = (obj_object.rows.length)-1;
+	var v_count = 0;
+	for (let i = 0; i < c_lastRow; i++) {
+		if(obj_object.rows[i].cells[c_cellValue].textContent.startsWith(c_researchedValue) === true){v_count++};
+		console.log(" - startswith : " + obj_object.rows[i].cells[c_cellValue].textContent.startsWith(c_researchedValue));
+	}
+	return v_count;
+ }
+ 
+// -------------------------------------------------------------------------------
+// 5.6.COUNT THE NUMBER OF SAME ELEMENT IN THE TABLE
+// -------------------------------------------------------------------------------
+ function f_countQuantity(c_object,c_researchedValue,c_cellValue,c_cellQuantity){
+	console.log("[f_countQuantity('" + c_object + "','" + c_researchedValue + "','" + c_cellValue + "','" + c_cellQuantity + "']");
+	
+	const obj_object = document.getElementById(c_object);
+	const c_lastRow = (obj_object.rows.length)-1;
+	console.log("c_lastRow : " + c_lastRow);
+	var v_count = 0;
+	for (let i = 0; i < c_lastRow; i++) {
+		var v_isTrue = (obj_object.rows[i].cells[c_cellValue].textContent.startsWith(c_researchedValue) === true | String(c_researchedValue) === "*/*") ? true : false;
+		console.log("i : " + i);
+		console.log("obj_object.rows[i].cells[c_cellValue].textContent : " + obj_object.rows[i].cells[c_cellValue].textContent);
+		console.log(" - v_isTrue : " + v_isTrue);
+		console.log(" - startsWith : " + obj_object.rows[i].cells[c_cellValue].textContent.startsWith(c_researchedValue));
+		if(v_isTrue){v_count = v_count + Number(obj_object.rows[i].cells[c_cellQuantity].textContent);}
+	}
+	return v_count;
+ }
+
+// ===============================================================================
+// 6. EMAIL SECTION
+// ===============================================================================
+
+// -------------------------------------------------------------------------------
+// 6.1.GET FIRST EMAIL IN MEMBERS TABLE
+// -------------------------------------------------------------------------------
+function f_getFirstEmail() {
+	console.log("[f_getFirstEmail]");
+	const table = document.getElementById("t_bodyMembers");
+	if (table.rows.length > 1) {
+    return table.rows[0].cells[9].textContent;
+	}
+	return "";
+}
+
+// -------------------------------------------------------------------------------
+// 6.2.GET FIRST NAME IN MEMBERS TABLE
+// -------------------------------------------------------------------------------
+function f_getFirstName() {
+	console.log("[f_getFirstName");
+	const table = document.getElementById("t_bodyMembers");
+	if (table.rows.length > 1) {
+    return table.rows[0].cells[2].textContent;
+	}
+	return "";
+}
+
+// -------------------------------------------------------------------------------
+// 6.3.BUILD THE HTML PAGE FOR EMAIL
+// -------------------------------------------------------------------------------
+function f_buildHtml() {
+  console.log("[f_buildEmailHtml]");
+
+  // --- Récupération des données ---
+  const requestType = document.getElementById('form_sbx_adhesion');
+  const requestLabel = requestType.options[requestType.selectedIndex].text;
+  const year = c_yearSubscription;
+  const total = document.getElementById('t_totalPrice').textContent || "—";
+
+  // --- Lignes du tableau des adhérents ---
+  const tbMembers = document.getElementById('t_bodyMembers');
+  const nbMembers = tbMembers.rows.length - 1; // ignore la ligne vide
+  let memberRows = "";
+
+  for (let i = 0; i < nbMembers; i++) {
+    const c = tbMembers.rows[i].cells;
+    const bg = (i % 2 === 0) ? "#ffffff" : "#eef7fa";
+    memberRows += `
+      <tr style="background-color:${bg};">
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;">${c[1].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;">${c[2].textContent} ${c[3].textContent}</td>
+		<td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;">${c[4].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:center;">${c[5].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#666;">${c[6].textContent}, ${c[7].textContent} ${c[8].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;">${c[9].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:center;">${c[10].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:center;">${c[11].textContent}</td>
+      </tr>`;
+  }
+
+  // --- Lignes du tableau des composantes ---
+  const tbArticles = document.getElementById('t_bodyArticles');
+  const nbArticles = tbArticles ? tbArticles.rows.length - 1 : 0;
+  let articleRows = "";
+
+  for (let i = 0; i < nbArticles; i++) {
+    const row = tbArticles.rows[i];
+    if (row.hidden) continue; // ignore les lignes masquées (ex: caution à 0)
+    const c = row.cells;
+    const bg = (i % 2 === 0) ? "#ffffff" : "#eef7fa";
+    articleRows += `
+      <tr style="background-color:${bg};">
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;">${c[1].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:center;">${c[2].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:right;">${c[3].textContent}</td>
+        <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:right;">${c[4].textContent}</td>
+      </tr>`;
+  }
+	bg = "#ffffff";
+	const c_personalData = document.getElementById("i_personalData").checked;
+	let v_personalData = (c_personalData) ?`
+		<tr style="background-color:${bg};">
+			<td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;"><input type="checkbox" checked> Je confirme avoir pris connaissance de la gestion des données personnelles.</td>
+		</tr>` : ``;	
+			
+	const c_signature = document.getElementById("i_signature").checked;
+ 	let v_signature = (c_signature) ?`
+		<tr style="background-color:${bg};">
+			<td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;"><input type="checkbox" checked> Je valide et signe ma demande d'adhésion et ses composantes.</td>
+		</tr>` : ``;	 
+  
+
+  // --- Construction de l'email complet ---
+  return `
+   <div style="margin:0;padding:0;background-color:#f0f2f5;font-family:Arial,Helvetica,sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f2f5;padding:20px 0;">
+      <tr><td align="center">
+
+        <table role="presentation" width="700" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+
+          <!-- EN-TÊTE -->
+          <tr>
+            <td style="background-color:#4AACC6;padding:10px 15px;text-align:center;">
+              <div style="color:#ffffff;font-size:30px;font-weight:bold;font-family:Arial;">Association Air et Soleil</div>
+              <div style="color:#dff1f6;font-size:16px;margin-top:4px; font-family:Comic Sans MS;">Club Naturiste Familial et Convivial</div>
+              <div style="color:#ffffff;font-size:20px;font-weight:bold;margin-top:12px; font-family:Comic Sans MS;">Bulletin d'Adhésion Année ${year}</div>
+            </td>
+          </tr>
+
+          <!-- TYPE DE DEMANDE -->
+          <tr>
+            <td style="padding:10px 15px 0;">
+              <p style="margin:0;font-size:14px;color:#555;">
+                <strong style="color:#4AACC6;">Type de demande :</strong> ${requestLabel}
+              </p>
+            </td>
+          </tr>
+
+          <!-- ADHÉRENTS -->
+          <tr>
+            <td style="padding:10px 15px 0;">
+              <h3 style="margin:0 0 2px;color:#333;font-size:16px;">Liste des adhérents</h3>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                <thead>
+                  <tr style="background-color:#4AACC6;color:#ffffff;">
+                    <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Statut</th>
+                    <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Nom Prénom</th>
+					<th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Sexe/Genre</th>
+                    <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:center;">Naissance</th>
+                    <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Adresse</th>
+                    <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:left;">E-mail</th>
+                    <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:center;">Tél.</th>
+                    <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:center;">FFN</th>
+                  </tr>
+                </thead>
+                <tbody>${memberRows || '<tr><td colspan="7" style="padding:10px;text-align:center;color:#999;font-size:12px;">Aucun adhérent</td></tr>'}</tbody>
+              </table>
+            </td>
+          </tr>
+
+          <!-- COMPOSANTES -->
+          <tr>
+            <td style="padding:10px 15px 0;">
+              <h3 style="margin:0 0 2px;color:#333;font-size:16px;">Composantes de l'adhésion</h3>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                <thead>
+                  <tr style="background-color:#4AACC6;color:#ffffff;">
+                    <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Désignation</th>
+                    <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:center;">Qté</th>
+                    <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:right;">Prix unitaire</th>
+                    <th style="padding:4px;border:1px solid #4AACC6;font-size:12px;text-align:right;">Total</th>
+                  </tr>
+                </thead>
+                <tbody>${articleRows || '<tr><td colspan="4" style="padding:10px;text-align:center;color:#999;font-size:12px;">Aucune composante</td></tr>'}</tbody>
+              </table>
+            </td>
+          </tr>
+
+         <!-- TOTAL -->
+          <tr>
+            <td style="padding:10px 10px 10px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:10px;background-color:#eef7fa;border-radius:2px;text-align:right;font-size:18px;font-weight:bold;color:#4AACC6;">
+                    Total de l'adhésion : ${total}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+		  
+		  <!-- CONSENTEMENTS -->
+          <tr>
+            <td style="padding:10px 15px 0;">
+              <h3 style="margin:0 0 2px;color:#333;font-size:16px;">Consentement (ou pas)</h3>
+				<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+			  ${v_personalData}
+			  ${v_signature}
+		  </table>
+          <!-- PIED DE PAGE -->
+          <tr>
+            <td style="background-color:#f7f9fb;padding:18px 30px;border-top:1px solid #e0e0e0;text-align:center;">
+              <p style="margin:0;font-size:11px;color:#999;">
+                Sentier des bois des Monts Frais — 95130 Franconville la Garenne<br>
+                Demande générée automatiquement le ${new Date().toLocaleDateString('fr-FR')}
+              </p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td></tr>
+    </table>
+  </div>`;
+}
+
+// -------------------------------------------------------------------------------
+// 6.4. SEND EMAIL
+// -------------------------------------------------------------------------------
+function f_sendEmail() {
+	console.log("[f_sendEmail()]");
+	const c_firstEmail = f_getFirstEmail();
+	const c_firstName = f_getFirstName();
+	const obj_suscriptionType = document.getElementById('form_sbx_adhesion');
+	const c_subType = obj_suscriptionType.options[obj_suscriptionType.selectedIndex].innerHTML;
+	var v_message = c_subType + " : " + c_firstName
+	
+  const templateParams = {
+    to_email: "cyrille.kehl@icloud.com;" + c_firstEmail,
+    user_email: c_firstEmail,
+    message: v_message,
+    html_content: f_buildHtml()
+  };
+
+  emailjs.init("2guZj7PKd8GsJG4no");
+  emailjs.send("service_s5kskmc", "template_qkyeghb", templateParams)
+    .then(() => alert("✅ Email envoyé avec succès !"))
+    .catch((error) => {
+      alert("❌ Erreur lors de l'envoi");
+      console.log(error);
+    });
+}
+
+
+
+
+
+ 
+</script>
+
+</body>
