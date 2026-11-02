@@ -300,7 +300,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2027.0.04";
+let l_release = "2027.0.05";
 
 const params = new URLSearchParams(window.location.search);
 const c_title = params.get("titre");
@@ -1188,13 +1188,13 @@ function f_buildHtml() {
 // 6.4. SEND EMAIL
 // -------------------------------------------------------------------------------
 function f_sendEmail() {
-	console.log("[f_sendEmail()]");
+	console.log("[f_sendEmail]");
 	const c_firstEmail = f_getFirstEmail();
 	const c_firstName = f_getFirstName();
 	var v_message = c_title + " : " + c_firstName
 	
   const templateParams = {
-    to_email: "cyrille.kehl@icloud.com;" + c_firstEmail,
+    to_email: "airetsoleil95@gmail.com;" + c_firstEmail,
     user_email: c_firstEmail,
     message: v_message,
     html_content: f_buildHtml()
