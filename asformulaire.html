@@ -300,7 +300,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2027.0.02";
+let l_release = "2027.0.03";
 
 const params = new URLSearchParams(window.location.search);
 const c_title = params.get("titre");
@@ -998,7 +998,7 @@ function f_getFirstEmail() {
 	console.log("[f_getFirstEmail]");
 	const table = document.getElementById("t_bodyMembers");
 	if (table.rows.length > 1) {
-    return table.rows[0].cells[9].textContent;
+    return table.rows[0].cells[4].textContent;
 	}
 	return "";
 }
