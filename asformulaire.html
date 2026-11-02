@@ -221,7 +221,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<input id="i_finalValidation" onclick="f_sendEmail()" value="J'envoie ma demande" class="inputproperties">
+					<button id="i_finalValidation" onclick="f_sendEmail()" class="inputproperties">J'envoie ma demande</button>
 				</div>
 			</form>
 		</div>
@@ -300,7 +300,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2027.0.03";
+let l_release = "2027.0.04";
 
 const params = new URLSearchParams(window.location.search);
 const c_title = params.get("titre");
@@ -1191,9 +1191,7 @@ function f_sendEmail() {
 	console.log("[f_sendEmail()]");
 	const c_firstEmail = f_getFirstEmail();
 	const c_firstName = f_getFirstName();
-	const obj_suscriptionType = document.getElementById('form_sbx_adhesion');
-	const c_subType = obj_suscriptionType.options[obj_suscriptionType.selectedIndex].innerHTML;
-	var v_message = c_subType + " : " + c_firstName
+	var v_message = c_title + " : " + c_firstName
 	
   const templateParams = {
     to_email: "cyrille.kehl@icloud.com;" + c_firstEmail,
